@@ -93,7 +93,7 @@ try:
             if long_url is None:
                 return render_template("link-404.html", short_url=short_url)
             else:
-                client.visit(short_url, 
+                client.visit(short_url,
                              source_ip = request.remote_addr,
                              platform = request.user_agent.platform,
                              browser = request.user_agent.browser,
@@ -212,6 +212,12 @@ def render_index(**kwargs):
                  ))
             ))
         )
+
+    #Get visit info for each link
+    for link in links:
+        shortUrl = link['_id']
+        visitInfo = client.get_visits(shortUrl)
+        link['visitInfo'] = visitInfo.get_results()
 
     resp = make_response(
             render_template("index.html",

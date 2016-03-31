@@ -19,7 +19,7 @@
 
     <h1>Manage URLs</h1>
     {% for link in links %}
-        <article class="link-group clearfix">
+        <article class="link-group clearfix card">
             <div class="link-info" style="clear: both;">
                 <div class="hover-controls">
                     [ <a href="{{ url_for('edit_link', url=link['_id'])}}">Edit</a> ]
@@ -49,6 +49,12 @@
                     Rutgers Views: {{ link['ru_visits'] }}
                 </div>
             </div>
+            <div class="statsDetails" style="display: none">
+                {% for visit in link['visitInfo'] %}
+                    {{ visit['browser']  }}
+                {% endfor %}
+            </div>
+
         </article>
     {% else %}
         {% if not query %}

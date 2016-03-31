@@ -71,3 +71,16 @@ function toggleLinks(cb, netid) {
         }
     });
 }
+
+
+
+
+/* jQuery code for the DOM manipulation required for displaying statistics. Will be turned into vanilla JS later on */
+
+$(document).ready(function() {
+    $(".card").click(function() {
+        $(".statsDetails").toggle("slow", function() {
+            console.log("Toggle successful");
+        });
+    });
+});
