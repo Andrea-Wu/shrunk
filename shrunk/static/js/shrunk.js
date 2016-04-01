@@ -79,8 +79,15 @@ function toggleLinks(cb, netid) {
 
 $(document).ready(function() {
     $(".card").click(function() {
-        $(".statsDetails").toggle("slow", function() {
-            console.log("Toggle successful");
-        });
+
+        if($(this).is(".card")) {
+            $(this).toggleClass("card");
+            $(this).toggleClass("clickedCard");
+        }
+
+        $(".clickedCard .statsDetails").toggle({duration: 0, done: function() {
+            $(this).parent().toggleClass("card");
+            $(this).parent().toggleClass("clickedCard");
+        }});
     });
 });
