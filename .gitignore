@@ -22,7 +22,7 @@ virtualenv/
 data/
 python3-flask-auth/
 node_modules/
-.sass-cache
+.sass-cache/
 startapp.py~
 startdb.sh~
 startlinks.py~

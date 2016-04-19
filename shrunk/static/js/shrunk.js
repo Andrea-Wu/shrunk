@@ -80,13 +80,7 @@ function toggleLinks(cb, netid) {
 $(document).ready(function() {
     $(".card").click(function() {
 
-        if($(this).is(".card")) {
-            $(this).toggleClass("card");
-            $(this).toggleClass("clickedCard");
-        }
-
-        $(".clickedCard .statsDetails").toggle({duration: 10, done: function() {
-            $(this).parent().toggleClass("card");
+        $(".statsDetails").toggle({duration: 10, done: function() {
             $(this).parent().toggleClass("clickedCard");
         }});
     });
