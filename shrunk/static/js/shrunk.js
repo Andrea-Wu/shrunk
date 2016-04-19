@@ -85,7 +85,7 @@ $(document).ready(function() {
             $(this).toggleClass("clickedCard");
         }
 
-        $(".clickedCard .statsDetails").toggle({duration: 0, done: function() {
+        $(".clickedCard .statsDetails").toggle({duration: 10, done: function() {
             $(this).parent().toggleClass("card");
             $(this).parent().toggleClass("clickedCard");
         }});

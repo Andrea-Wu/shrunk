@@ -11,6 +11,8 @@ from shrunk.user import User, get_user, admin_required
 from shrunk.util import get_db_client, set_logger, formattime, get_domain
 from shrunk.filters import strip_protocol, ensure_protocol
 
+from operator import itemgetter
+
 # Create application
 app = Flask(__name__)
 
@@ -218,6 +220,20 @@ def render_index(**kwargs):
         shortUrl = link['_id']
         visitInfo = client.get_visits(shortUrl)
         link['visitInfo'] = visitInfo.get_results()
+        link['browserTotals'] = dict()
+
+    # Creat running total for each browser visit
+    # Is there a more pythonic way to do this?
+    for visit in link['visitInfo']:
+        if visit['browser'] in link['browserTotals']:
+            link['browserTotals'][visit['browser']] += 1
+        else:
+            link['browserTotals'][visit['browser']] = 1
+
+    # Sort browser visit totals by key; turns link['browserTotals'] into a list of tuples
+    link['browserTotals'] = sorted(link['browserTotals'].items(), key=itemgetter(1))
+
+
 
     resp = make_response(
             render_template("index.html",

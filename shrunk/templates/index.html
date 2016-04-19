@@ -50,9 +50,12 @@
                 </div>
             </div>
             <div class="statsDetails" style="display: none">
-                {% for visit in link['visitInfo'] %}
-                    {{ visit['browser']  }}
-                {% endfor %}
+                <div class="chart"> 
+                     {% for tuple  in link['browserTotals'] %}
+                        <div style="width: {{ tuple[1] * 50  }}px"> {{ tuple[0]|e  }} -  {{ tuple[1]|e }} </div>
+                        <br />
+                     {% endfor %}
+                </div>
             </div>
 
         </article>

@@ -275,6 +275,29 @@ label {
     }
 }
 
+
+/* Card logic styling */ 
+.card, .clickedCard {
+    cursor: pointer;
+    padding: 50px;
+    padding-bottom: 100px;
+
+    .statsDetails {
+        height: 100px;
+    }
+}
+
+.chart div {
+    font: 10px sans-serif;
+    background-color: #D21034;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+    display: inline-block;
+}
+
+
 .original-url {
     color: #191917;
 }
