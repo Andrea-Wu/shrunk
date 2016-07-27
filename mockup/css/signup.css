@@ -1,0 +1,116 @@
+#urlshortener{
+color:rgb(204, 0, 51);  
+}
+
+#urlshortener:hover{
+cursor: default;  
+}
+
+.jumbotron {
+height:auto;
+padding:10px;
+padding: 0;
+margin: 0;	
+width:100%;
+background:url('../assets/purebg.jpg') center;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+-moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+border: 0px;
+}
+
+.container {border:0px;}
+
+#logobox{
+padding-top:0;
+}
+
+#rulogo {
+width:auto;
+height: 120%;
+margin-top:5%;
+margin-left:0;
+position: relative;
+}
+
+.col-sm-6{
+position: relative;
+padding:10px 20px 10px 20px;
+background: rgba(255,255,255,0.9);
+margin-left:25%;
+margin-right:25%;
+border: 0px;
+}
+
+.row{
+height: 100%;
+width: 100%;
+position: relative;
+border: 0px;	
+}
+
+.breadcrumb, footer{ background: white; }
+
+.breadcrumb{margin-bottom: 0;}
+
+.btn{
+background: #E91E63;
+color: white;
+width: 100px;
+}
+
+.btn:disabled:hover:not([enabled="enabled"]) {
+background: #E91E63;
+color: white;
+}
+
+.btn:hover{
+background: #eb3472;
+color: white;
+margin-top:2px;
+-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+-moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+border: 0px; 
+}
+
+#copyright{
+margin-bottom: 15px;	
+}
+
+#formbox{
+width:80%;
+height:100%;
+}
+
+#feedback-user, #feedback-repwd{
+color: #E91E63;	
+}
+
+form ul.helper-text {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 18px;
+  color: #808080;
+  display: none;
+}
+
+form ul.helper-text li{
+  margin: 0px;
+  padding: 0px;
+}
+
+form ul.helper-text li.valid {
+  color: #31B59B;
+}
+
+form.valid input {
+  border: 2px solid #1fd34a;
+}

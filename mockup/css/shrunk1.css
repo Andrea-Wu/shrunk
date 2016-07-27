@@ -1,0 +1,245 @@
+/* media queries */
+/* Iphone 5s (portrait) ----------- */
+@media only screen and (max-width:400px) {
+
+}
+
+/* Samsumg s6, Samsung note iphone 6, iphone 6 plus(portrait) ----------- */
+@media only screen and (max-width:550px) and (min-width:401px) {
+	
+}
+
+/* small tablets (portrait) ----------- */
+@media only screen and (max-width:750px) and (min-width:551px) {
+
+}
+
+
+/*-------------------main--------------------*/
+html{margin:0; padding:0;}
+
+body{
+margin:0;	
+padding:0;
+background:url('../assets/purebg.jpg') center;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+overflow-x: hidden;
+}
+
+nav.navbar {
+border-radius: 0px;	
+}
+
+ul.nav li:nth-child(1){
+font-weight: bold;	
+}
+
+#urlshortener{
+color:rgb(204, 0, 51);	
+}
+
+#urlshortener:hover{
+cursor: default;	
+}
+
+#rulogo {
+width:auto;
+height: 115%;
+margin-top:5%;
+position: relative;
+}
+
+.jumbotron{
+padding: 0;
+margin: 0;
+border:0px;
+background-color: rgba(255,255,255,0);
+}
+
+#subjumbo{
+position:inherit;
+height: auto;
+width:60%; 
+margin-left:20%;	
+}
+
+#logobox{
+padding-top:0;	
+}
+
+.breadcrumb, footer{ background: #EEEEEE; }
+
+.breadcrumb{margin-bottom: 0;}
+
+#searchbox{
+position: relative;
+z-index: 10;
+top: 75%;
+margin-right: auto;
+}
+
+.input-group .btn{
+background: #E91E63;
+color: white;
+width: 90px;
+}
+
+.input-group .btn:disabled:hover:not([enabled="enabled"]) {
+background: #E91E63;
+color: white;
+}
+
+.input-group .btn:hover{
+background: #eb3472;
+color: white;
+top:0.5px;
+left:2px;
+-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+-moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+border: 0px; 
+}
+
+#copyright{
+margin-bottom: 15px;
+font-size:14px;	
+}
+
+#focuspic{
+width: 80%;
+height: auto;
+margin-left: 10%;
+margin-right: 10%;
+}
+
+#linktitle{
+padding-left:4px;
+padding-bottom: 5px;	
+}
+
+#linktitle:hover{
+color:white;
+cursor:pointer; 
+}
+
+#titleinput{
+display: none;
+margin-bottom: 15px;	
+}
+
+#history{
+margin-top: 20px;
+margin-bottom: 0px;
+padding: 0;	
+}
+
+#pagination {
+margin-top:0; 
+display:none;	
+}
+
+#pagination li:nth-child(6) a{
+visibility:hidden;
+}
+
+#pagination li a {
+background-color: rgba(255, 255, 255, 0.2);
+color: black;
+border:0;
+}
+
+#pagination li a:hover {
+color: white;
+}
+
+a#pagesearch:hover {
+color: black;	
+}
+
+#pagesearch{
+width:10%; 
+padding-left:0; 
+padding-right:0;	
+}
+
+#pagesearch input{
+width:100%; 
+height:150%; 
+border:0; 
+background:rgba(255,255,255,0.5);	
+}
+
+#hiddentoggle{
+margin-bottom: 20px;
+padding: 0;
+display: none;
+}
+
+#box1{
+padding-bottom: 0px;
+margin-bottom: 0px;	
+}
+
+table{
+margin-bottom: 0px;
+}
+
+.imgtitle{
+font-weight:bold;
+color:white; 	
+}
+
+.img-responsive{
+margin-left: auto;
+margin-right: auto;
+width: 70%;
+}
+
+.modalimg{
+width: 90%;	
+}
+
+#myTable, #tablehead {
+background-color: rgba(255, 255, 255, 0.2);
+}
+
+#myTable_length{
+display: none;
+}
+
+#myTable thead tr th:nth-child(1) input{
+visibility:hidden;
+}
+
+#myTable thead tr th:nth-child(6){
+text-align:center;
+}
+
+.odd td{
+background-color: rgba(255, 255, 255, 0.1);	
+}
+
+#page {
+padding-top:5px;
+margin-top:10px; 	
+}
+
+#scrollbox{
+max-height:237px; 
+overflow-y:auto; 
+}
+
+#scrollbox::-webkit-scrollbar { width: 0 !important }
+#scrollbox { -ms-overflow-style: none; }
+#scrollbox { overflow: -moz-scrollbars-none; }
+
+#tableHeading table thead tr>th {
+border:0;
+}
+
+#tableHeading table thead tr th:nth-child(6) {
+text-align:center;
+}

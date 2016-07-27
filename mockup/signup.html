@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sign Up</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="assets/r.ico" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="css/signup.css" rel="stylesheet" type="text/css" />
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+
+<body id="signup">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#" id='logobox'><img id='rulogo' src='assets/logored.png' /></a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li style="font-weight: bold;"><a id="urlshortener" href="#">URL Shortener </a></li>
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+          </ul>
+        </div>
+  </nav>
+
+<br>
+<br>
+    <div class="jumbotron">
+    <div class="container"> 
+      <div class="row">
+                 
+        </div>
+        <div class="col-sm-6">
+           <div class="container" id='formbox'>
+                <h2>SIGN UP</h2>
+
+                <form role="form">
+                  <div class="form-group">
+                    <label for="user">Your RUID:</label>
+                    <input type="username" class="form-control" id="userid" placeholder="Enter RUID"><div id="feedback-user"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="pwd"> Setup Password:
+                    </label>
+                    <input type="text" class="form-control" id="pwd" placeholder="Enter password">
+                        <ul class="helper-text" style="list-style-type:none">
+                            <li class="length">Must be at least 8 characters long.</li>
+                            <li class="lowercase">Must contain a lowercase letter.</li>
+                            <li class="uppercase">Must contain an uppercase letter.</li>
+                            <li class="special">Must contain a number or special character.</li>
+                        </ul>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="repwd">Re-Enter Password:</label>
+                    <input type="text" class="form-control" id="repwd" placeholder="Re-Enter password"><div id="feedback-repwd"></div>
+                  </div>
+
+                  <button type="submit" class="btn" id="submitbtn">Create</button>
+                </form>
+                
+                <h6><a href='login.html'>Have an account? Login here</a></h6>
+              </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+   <br>
+   <br>
+
+  <footer class="container-fluid text-center">
+      <ul class="breadcrumb">
+        <li><a href="http://rutgers.edu">Rutgers</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+
+    <p id="copyright">&copy;2011-2016 RUTGERS, THE STATE UNIVERSITY OF NEW JERSEY</p>
+
+  </footer>
+     
+<script type="text/javascript" src="js/user-signup.js"></script>   
+<script type="text/javascript" src="js/pwdvalidation.js"></script>
+<script type="text/javascript" src="js/pwdre.js"></script>
+<script type="text/javascript" src="js/password.js"></script>
+<script type="text/javascript" src="js/displayhint.js"></script>
+<script type="text/javascript" src="js/disablebtn-signup.js"></script>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+
+
+
+</body>
+</html>
