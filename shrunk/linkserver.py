@@ -3,7 +3,6 @@
 """Flask application for the link server."""
 
 from flask import Flask, render_template, request, redirect, g
-from user_agents import parse as parse_ua
 import shrunk.client
 import shrunk.util
 
