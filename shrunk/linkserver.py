@@ -3,7 +3,7 @@
 """Flask application for the link server."""
 
 from flask import Flask, render_template, request, redirect, g
-
+from user_agents import parse as parse_ua
 import shrunk.client
 import shrunk.util
 
@@ -37,22 +37,24 @@ def redirect_link(short_url):
 
     app.logger.info("{} requests {}".format(request.remote_addr, short_url))
 
-    # Perform a lookup and redirect
     long_url = client.get_long_url(short_url)
+
     if long_url is None:
         return render_template("link-404.html", short_url=short_url)
-    else:
-        client.visit(short_url = short_url, 
-                     source_ip = request.remote_addr,
-                     platform = request.user_agent.platform,
-                     browser = request.user_agent.browser,
-                     referrer = shrunk.util.get_domain(request.referrer))
 
-        # Check if a protocol exists
-        if "://" in long_url:
-            return redirect(long_url)
-        else:
-            return redirect("http://{}".format(long_url))
+    # Log statistics about the request
+    stats = shrunk.util.parse_stats(request.user_agent.string)    
+    client.visit(short_url = short_url, 
+                 source_ip = request.remote_addr,
+                 device = stats['device'],
+                 browser = stats['browser'],
+                 referrer = shrunk.util.get_domain(request.referrer))
+
+    # Check if a protocol exists
+    if "://" in long_url:
+        return redirect(long_url)
+    else:
+        return redirect("http://{}".format(long_url))
 
 
 @app.route("/")

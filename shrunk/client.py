@@ -363,7 +363,11 @@ class ShrunkClient(object):
             "_id" : short_url,
             "long_url" : long_url,
             "timeCreated" : datetime.datetime.now(),
-            "visits" : 0
+            "visits" : {
+                "total": 0,
+                "devices": {},
+                "browsers": {}
+            }
         }
         if netid is not None:
             document["netid"] = netid
@@ -599,7 +603,7 @@ class ShrunkClient(object):
         cursor = db.urls.find(query)
         return ShrunkCursor(cursor)
 
-    def visit(self, short_url, source_ip, platform, browser, referrer):
+    def visit(self, short_url, source_ip, device, browser, referrer):
         """Visits the given URL and logs visit information.
 
         On visiting a URL, this is guaranteed to perform at least the following
@@ -614,15 +618,22 @@ class ShrunkClient(object):
           The long URL corresponding to the short URL, or None if no such URL
           was found in the database.
         """
+        # Increment the visitor info in the link entry in the urls collection
         db = self._mongo.shrunk_urls
         db.urls.update({"_id" : short_url},
-                       {"$inc" : {"visits" : 1}})
+                       { "$inc": { 
+                            "visits.total": 1,
+                            "visits.devices."+device: 1,
+                            "visits.browsers."+browser: 1
+                         }
+                        })
 
+        # Finally, log all visitor info in the visits collection
         db = self._mongo.shrunk_visits
         db.visits.insert({
             "short_url" : short_url,
             "source_ip" : source_ip,
-            "platform" : platform,
+            "device" : device,
             "referrer" : referrer,
             "browser" : browser,
             "time" : datetime.datetime.now()

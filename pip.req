@@ -8,3 +8,4 @@ itsdangerous==0.24
 pyasn1==0.1.7
 pymongo==2.7.2
 python3-ldap>=0.9.7
+user-agents==1.0.1

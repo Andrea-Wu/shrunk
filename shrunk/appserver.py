@@ -215,26 +215,6 @@ def render_index(**kwargs):
             ))
         )
 
-    #Get visit info for each link
-    for link in links:
-        shortUrl = link['_id']
-        visitInfo = client.get_visits(shortUrl)
-        link['visitInfo'] = visitInfo.get_results()
-        link['browserTotals'] = dict()
-
-    # Creat running total for each browser visit
-    # Is there a more pythonic way to do this?
-    for visit in link['visitInfo']:
-        if visit['browser'] in link['browserTotals']:
-            link['browserTotals'][visit['browser']] += 1
-        else:
-            link['browserTotals'][visit['browser']] = 1
-
-    # Sort browser visit totals by key; turns link['browserTotals'] into a list of tuples
-    link['browserTotals'] = sorted(link['browserTotals'].items(), key=itemgetter(1))
-
-
-
     resp = make_response(
             render_template("index.html",
                             admin=is_admin,

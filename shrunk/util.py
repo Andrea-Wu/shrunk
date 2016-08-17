@@ -6,7 +6,7 @@ import logging
 
 from shrunk.client import ShrunkClient
 from urllib.parse import urlsplit
-
+from user_agents import parse as parse_ua
 
 def get_db_client(app, g):
     """Gets a reference to a ShrunkClient for database operations.
@@ -65,3 +65,25 @@ def get_domain(uri):
         return domain
     except:
         return "unknown"
+
+def parse_stats(ua_string):
+    """Utility function to grab data from user agent strings
+    """
+    ret = {}
+    
+    ua = parse_ua(ua_string)
+    
+    ret['browser'] = ua.browser.family
+    if ua.is_mobile:
+        ret['device'] = "smartphone"
+    elif ua.is_tablet:
+        ret['device'] = "tablet"
+    elif ua.is_pc:
+        ret['device'] = "pc"
+    elif ua.is_bot:
+        ret['device'] = "bot"
+    else:
+        ret['device'] = "unknown"
+
+    return ret
+
