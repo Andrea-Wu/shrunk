@@ -1,221 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="shrunkApp" ng-cloak>
 <head>
     <title>shrunk</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/r.ico" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link href="css/shrunk1.css" rel="stylesheet" type="text/css" />
+    <link href="css/index.css" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+    <script src="lib/angular.min.js"></script>
+    <script src="controller/app.js"></script>
+    <script src="lib/angular-animate.min.js"></script>
+    <script src="lib/ui-bootstrap-custom-tpls-2.0.1.min.js"></script>
+    <script src="lib/angular-route.min.js"></script>
 
 </head>
 
-<body id="shrunk">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#" id='logobox'><img id='rulogo' src='assets/logored.png' /></a>
-          </div>
-          <ul class="nav navbar-nav">
-            <li><a id="urlshortener" href="#">URL Shortener </a></li>
-            <li><a href="#">User</a></li>
-            <li><a href="#">NetID</a></li>
-            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administrator<span class="caret"></span></a>
-		        <ul class="dropdown-menu">
-		          <li><a href="#">Power User</a></li>
-		          <li><a href="#">User</a></li>
-		        </ul> 
-            </li>  <!--add a modal  what an admin user can do-->
-            <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
-          </ul>
-        </div>
-  </nav>
-
-    <div class="jumbotron">
-       <div class="row"> 
-           <img id='focuspic' src='assets/shrunkfocus.png' />
-       </div>
-
-       <div id='subjumbo' class='container-fluid'>
-           
-           <div class="row">
-
-               <div id='searchbox'>
-                  <div id="linktitle">Click here for customized title (optional)</div>
-                  <div id="titleinput"><input id="idtitle" type="text" class="form-control" placeholder="Creat a link title...">
-                  </div>            
-                  <div class="input-group">
-                        <input id="longurl" type="text" class="form-control" placeholder="Paste a URL here...">
-                        <span class="input-group-btn">
-                        <button class="btn" type="button" background="#E91E63" id="shortenbtn">Shorten</button>
-                        </span>
-                  </div>                    
-               </div>
-
-           </div>
-
-           <div class="row" id="box1"> 
-              <div class="container-fluid" id="history">
-				<div id="scrollbox">
-				  <table class="table" cellspacing="0" id="myTable">
-                    <thead>
-                      <tr>
-                        <th> <input type="checkbox" value="" id="check1"></th>
-                        <th>TITLE</th>
-                        <th>LONG URL</th>
-                        <th>SHORT URL</th>
-                        <th>CREATED</th>
-                        <th>STATS</th>
-                      </tr>
-                    </thead>
-                    <tbody id="historytable">                                   
-                    </tbody>
- 				  </table>
- 				</div>
- 				<div id="tableHeading" style="display:none; z-index:10;">
-	 				<table class="table" cellspacing="0" id="tablehead">
-	                    <thead>
-	                      <tr>
-	                        <th> <input type="checkbox" value="" style="visibility:hidden"></th>
-	                        <th>TITLE</th>
-	                        <th>LONG URL</th>
-	                        <th>SHORT URL</th>
-	                        <th>CREATED</th>
-	                        <th>STATS</th>
-	                      </tr>
-	                    </thead>
-	 				  </table>
- 				</div> 
-                  
-                  <div id="page" class="row">
-                      <div class="col-sm-8">  
-		                  <ul class="pagination pagination-sm" id="pagination">
-		                      <li><a href="#"><</a></li>
-		                      <li><a href="#">1</a></li>
-  		                      <li><a href="#">...</a></li>
-		                      <li><a href="#">5</a></li>
-		                      <li><a href="#">></a></li>
-		                      <li><a href="#">></a></li>
-		                      <li><a id="pagesearch"><input type="text" placeholder=" #"></a></li>
-		                      <li><a href="#">GO</a></li>
-		                  </ul>
-	                  </div>               
-                               
-	              </div>
-
-            </div>
-
-           <div class="row">
-                <div class="container-fluid" id="hiddentoggle">
-                     <button class="btn btn-default" type="button" background="#E91E63" id="hidebtn">Hide</button> Hidden urls remain valid, but will be removed from the list.
-                </div>
-           </div> 
-
-       </div>    
-    </div>
-    <br><br><br>
-
-  <div class="container-fluid bg-3 text-center">    
-      <div class="row">
-            <div class="col-sm-4"> 
-              <p class="imgtitle">Shorten</p>
-              <img src="assets/shorten.png" class="img-responsive" alt="Image">
-            </div>
-            <div class="col-sm-4"> 
-                <p class="imgtitle">Share</p>
-                <img src="assets/share.png" class="img-responsive" alt="Image">
-            </div>
-            <div class="col-sm-4">
-                <p class="imgtitle">Track</p>
-                <img src="assets/track.png" class="img-responsive" alt="Image">
-            </div>
-      </div>
-  </div><br><br>
-
-<!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Statistics for ab.cd</h4>
-        </div>
-
-        <div class="modal-body">
-          <div class="row">
-              <div class="col-sm-6"> 
-                <img class="modalimg" src="assets/traffic.jpg"/>
-              </div>
-              <div class="col-sm-6">    
-                <img class="modalimg" src="assets/map.jpg"/>
-              </div>
-          </div>
-          <br>   
-          <div class="row">      
-              <div class="col-sm-6">   
-                <img class="modalimg" src="assets/pie.jpg"/>
-              </div>
-              <div class="col-sm-6">   
-                <img class="modalimg" src="assets/bar.jpg"/>
-              </div>
-          </div>      
-          <br>
-          <div class="row">
-              <div class="col-sm-4">
-                  <em>Upstream Sites</em>
-                  <ul style="list-style-type:none; line-height: 16px; padding: 0px;">
-                      <li>google.com</li>
-                      <li>rutgers.edu</li>
-                      <li>bing.com</li>
-                  </ul>
-              </div>
-              <div class="col-sm-4">
-                  <em>Downstream Sites</em>
-                  <ul style="list-style-type:none; line-height: 16px; padding: 0px;">
-                      <li>rutger.edu/index.html</li>
-                      <li>newbrunswick.rutgers.edu</li>
-                  </ul>
-              </div>
-              <div class="col-sm-4">
-                  <em>Bounce Rate</em>
-                  <ul style="list-style-type:none; line-height: 16px; padding: 0px;">
-                      <li>5.6</li>
-                  </ul>
-              </div>
-          </div> 
-        </div>
-
-      </div>
-      
-    </div>
-  </div>   
-
-
-<!--http://placehold.it/150x80?text=IMAGE*/-->
-
-  <footer class="container-fluid text-center">
-      <ul class="breadcrumb">
-        <li><a href="http://rutgers.edu">Rutgers</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-
-    <p id="copyright">&copy;2011-2016 RUTGERS, THE STATE UNIVERSITY OF NEW JERSEY</p>
-
-  </footer>
-
-<script type="text/javascript" src="js/titleinput.js"></script>
-<script type="text/javascript" src="js/insertrow1.js"></script>
-
-<!-- DATA TABES SCRIPT -->
-<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-
+<body id="shrunk" ng-controller="urlShortener">
+    <header ng-include="'includes/header1.html'"></header>
+    <main ng-view ></main>
+    <footer ng-include="'includes/footer.html'"></footer>
+  
 </body>
 
 </html>

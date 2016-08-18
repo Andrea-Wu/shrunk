@@ -1,0 +1,83 @@
+ <div class="jumbotron">
+        <div class="row"> 
+            <img id='focuspic' src='assets/shrunkfocus.png' />
+        </div>
+
+        <div id='subjumbo' class='container-fluid'>
+
+            <div class="row">
+
+                <div id='searchbox'>
+                    <form name="FORM" novalidate>   
+                        <div>
+                            <div id="linktitle" ng-click="clicked=!clicked">Click here for customized title (optional)</div>
+                        </div>
+                        <div id="titleinput" ng-if="clicked" style="overflow:hidden">
+                            <input id="idtitle" type="text" class="form-control" ng-model="newrow.title" placeholder="Creat a link title...">
+                        </div>            
+                        <div class="input-group">
+                            <input id="longurl" name="longUrl" type="text" class="form-control" ng-model="newrow.longUrl" ng-required="true" placeholder="Paste a URL here...">
+                            <span class="input-group-btn">
+                                <button class="btn" type="button" background="#E91E63" id="shortenbtn" name="submit" ng-click="addRow()" ng-disabled="FORM.longUrl.$touched && FORM.longUrl.$invalid">Shorten</button>
+                            </span>
+                        </div>
+                        <!--  <div ng-show="FORM.longUrl.$dirty && FORM.longUrl.$invalid" style="color:#E91E63; text-align:center">
+                        Please enter the URL
+                        </div>  -->
+                    </form>      
+                </div>
+
+            </div>
+
+            <div class="row" id="box1" ng-if="results.length > 0"> 
+                <div class="container-fluid" id="history">
+                    <div id="scrollbox">
+                        <table class="table" cellspacing="0" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th> <input type="checkbox" value="" id="check1"></th>
+                                    <th>TITLE</th>
+                                    <th>LONG URL</th>
+                                    <th>SHORT URL</th>
+                                    <th>CREATED</th>
+                                    <th>STATS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historytable"> 
+                                <tr ng-repeat="result in results | beginWith:(currentPage - 1) * pageSize | limitTo:pageSize | filter: search">
+                                    <td><span class="glyphicon glyphicon-pencil" ng-click="editData(result)" style="cursor:pointer"></span></td>
+                                    <td>{{result.title}}</td> 
+                                    <td>{{result.longUrl}}</td>
+                                    <td>{{result.shortUrl}}</td>
+                                    <td>{{result.timeCreated | date:"hh:mm:ss a"}}</td>
+                                    <td style="text-align:center"><a class="btn btn-default btn-xs" style="border:0" data-toggle="modal" href="#/stat/{{$index}}" >view</a></td> 
+                                </tr>
+                                <tr id="editInput" style="display:none; ">
+                                    <td><span class="glyphicon glyphicon-repeat" style="cursor:pointer" ng-click="saveData(current)"></span></td>
+                                    <td><input type=text style="border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);" ng-model="current.title" value="{{current.title}}"></td>   
+                                    <td><input type=text style="border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);" ng-model="current.longUrl" value="{{current.longUrl}}"></td>
+                                    <td><input type=text style="border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);" ng-model="current.shortUrl" value="{{current.shortUrl}}"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>    
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" id="box2" ng-if="results.length > 0">
+                <div class="col-sm-7" style="padding:0">
+                    <ul id="pagination" uib-pagination total-items="results.length" ng-model="currentPage" items-per-page="pageSize" max-size="4" class="pagination-sm" boundary-link-numbers="true" rotate="false"></ul>
+                </div>
+                <div class="col-sm-5" style="padding:0; margin-top:0">
+                    <input class="form-control input-sm" id="searchList" type="text" ng-model="search" placeholder=" Search in the list ...">
+                </div>
+            </div> 
+  
+        </div>
+        <br><br><br><br>
+</div>    
+
+<div ng-include="'includes/pictures.html'"></div>
+<!--http://placehold.it/150x80?text=IMAGE*/-->

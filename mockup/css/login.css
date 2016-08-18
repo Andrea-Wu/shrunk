@@ -1,9 +1,21 @@
-#urlshortener{
-color:rgb(204, 0, 51);	
+#Urlshortener {
+color:rgb(204, 0, 51);
+font-weight: bold;
 }
 
-#urlshortener:hover{
+#Urlshortener:hover {
 cursor: default;	
+}
+
+.navbar-header {
+padding-bottom: 2px;    
+}
+
+#rulogo {
+width:auto;
+height: 115%;
+margin-top:5%;
+position: relative;
 }
 
 .jumbotron {
@@ -28,11 +40,12 @@ border:0px;
 }
 
 #largebox{
-background:url('../assets/cutlink.gif') center;
--webkit-background-size: center;
--moz-background-size: center;
--o-background-size: center;
-background-size: center;
+background:url('../assets/focus.png');
+background-size: contain;
+-webkit-background-size: contain;
+-moz-background-size: contain;
+-o-background-size: contain;
+background-repeat: no-repeat;
 }
 
 #logobox{
@@ -101,7 +114,6 @@ width:80%;
 height:100%;
 }
 
-#feedback{
+.feed{
 color: #E91E63;	
 }
-

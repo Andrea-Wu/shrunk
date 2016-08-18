@@ -6,6 +6,10 @@ color:rgb(204, 0, 51);
 cursor: default;  
 }
 
+.navbar-header {
+padding-bottom: 2px;    
+}
+
 .jumbotron {
 height:auto;
 padding:10px;

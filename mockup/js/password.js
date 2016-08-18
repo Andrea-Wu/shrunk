@@ -13,4 +13,4 @@ elrepwd.addEventListener( 'focus', function(){
 });
 elrepwd.addEventListener( 'blur', function(){
     elrepwd.type = 'password';
-});
+});  

@@ -10,14 +10,14 @@ function hide(){
 	hint.style.display = 'none';
 }
 
-elpwd.addEventListener( 'focus', function(){
+elpwd.onfocus = function(){
     display();
-});
+};
 
-elpwd.addEventListener( 'blur', function(){
+elpwd.onblur = function(){
     hide();
-});
+};
 
-elrepwd.addEventListener( 'focus', function(){
+elrepwd.onfocus = function(){
     hide();
-});
+};
