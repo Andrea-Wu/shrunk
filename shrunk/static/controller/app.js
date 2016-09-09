@@ -3,15 +3,15 @@ var myApp = angular.module('shrunkApp', ['ngAnimate', 'ui.bootstrap', 'ngRoute']
 myApp.config(['$routeProvider', function($routeProvider){
     $routeProvider
     .when('/',{
-        templateUrl: 'views/home.html',
+        templateUrl: '/static/views/home.html',
         controller: 'urlShortener'
     })
     .when('/stat/:id',{
-        templateUrl: 'views/stats.html',
+        templateUrl: '/static/views/stats.html',
         controller: 'viewController'
     })
     .otherwise({
-        redirectTo: 'views/home.html',
+        redirectTo: '/static/views/home.html',
         controller: 'urlShortener'
     })    
 }]);

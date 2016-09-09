@@ -3,12 +3,12 @@ var loginApp = angular.module('shrunkLogin', ['ngRoute', 'ngAnimate']);
 loginApp.config(['$routeProvider', function($routeProvider){
     $routeProvider
     .when('/',{
-        templateUrl: 'views/loginview.html'
+        templateUrl: '/static/views/loginview.html'
     })
     .when('/signup',{
-        templateUrl: 'views/signupview.html'
+        templateUrl: '/static/views/signupview.html'
     })
     .otherwise({
-        redirectTo: 'views/loginview.html'
+        redirectTo: '/static/views/loginview.html'
     })    
 }]);
