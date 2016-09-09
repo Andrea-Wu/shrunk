@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="assets/r.ico" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link href="css/index.css" rel="stylesheet" type="text/css" />
+    <link href="css/sidebar.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="lib/angular.min.js"></script>
@@ -14,14 +15,58 @@
     <script src="lib/angular-animate.min.js"></script>
     <script src="lib/ui-bootstrap-custom-tpls-2.0.1.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
-
 </head>
 
-<body id="shrunk" ng-controller="urlShortener">
-    <header ng-include="'includes/header1.html'"></header>
-    <main ng-view ></main>
-    <footer ng-include="'includes/footer.html'"></footer>
-  
+<body ng-controller="urlShortener">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li>
+                <a class="logoholder" id='logobox'><img id='rulogo' src='/static/assets/logored.png' /></a>
+            </li>
+            <li>
+                <a class="logoholder" href="">Administrator's Dashboard</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/blockurl"><img class="sideicon" src="/static/assets/blockurl.png">  BLock URLs</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/"><img class="sideicon" src="/static/assets/manageurl.png">  Manage All URLs</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/usermgmt"><img class="sideicon" src="/static/assets/userroles.png">  Manage User Roles</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/blacklist"><img class="sideicon" src="/static/assets/blockuser.png">  Blacklist Users</a>
+            </li>
+        </ul>
+    </div>    
+    <div id="dialogoverlay"></div>
+    <div id="shrunk">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid" style="padding-left:0;">
+                    <ul class="nav navbar-nav">
+                        <li><a id="openicon"><span class="glyphicon glyphicon-menu-hamburger"></span></a></li>
+                        <li><a id="urlshortener" href="#/"><span class="glyphicon glyphicon-home"></span> My URL Shortener</a></li>
+                        <li><a href="">NetID</a></li>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Administrator<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="">Power User</a></li>
+                            <li><a href="">User</a></li>
+                        </ul> 
+                        </li>  <!--add a modal  what an admin user can do-->
+                        <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>        
+                    </ul>
+                    <div id="searchframe"><input id="searchIn" class="form-control input-sm" type="text" ng-model="searchText" placeholder="Search created links ..." ng-keydown="checkKeyDown($event)" ng-keyup="checkKeyUp($event)" ng-change="search()"></div>
+                    <ul class="suggestions-list">
+                        <li ng-repeat="suggestion in suggestions track by $index" ng-class="{active : selectedIndex === $index}" ng-click="AssignValueAndHide($index)">{{suggestion}}</li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main ng-view ></main>
+        <footer ng-include="'includes/footer.html'" style="background:rgba(255,255,255,0);"></footer>
+    </div>
 </body>
 
 </html>
