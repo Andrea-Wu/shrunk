@@ -1,83 +1,90 @@
- <div class="jumbotron">
-        <div class="row"> 
-            <img id='focuspic' src='assets/shrunkfocus.png' />
-        </div>
-
-        <div id='subjumbo' class='container-fluid'>
-
-            <div class="row">
-
-                <div id='searchbox'>
-                    <form name="FORM" novalidate>   
-                        <div>
-                            <div id="linktitle" ng-click="clicked=!clicked">Click here for customized title (optional)</div>
-                        </div>
-                        <div id="titleinput" ng-if="clicked" style="overflow:hidden">
-                            <input id="idtitle" type="text" class="form-control" ng-model="newrow.title" placeholder="Creat a link title...">
-                        </div>            
-                        <div class="input-group">
-                            <input id="longurl" name="longUrl" type="text" class="form-control" ng-model="newrow.longUrl" ng-required="true" placeholder="Paste a URL here...">
-                            <span class="input-group-btn">
-                                <button class="btn" type="button" background="#E91E63" id="shortenbtn" name="submit" ng-click="addRow()" ng-disabled="FORM.longUrl.$touched && FORM.longUrl.$invalid">Shorten</button>
-                            </span>
-                        </div>
-                        <!--  <div ng-show="FORM.longUrl.$dirty && FORM.longUrl.$invalid" style="color:#E91E63; text-align:center">
-                        Please enter the URL
-                        </div>  -->
-                    </form>      
-                </div>
-
+<div ng-controller="appBody">
+    <div class="jumbotron">
+            <div class="row" style="text-align:center;"> 
+                <img id='focuspic' src='assets/shrunkfocus.png' />
             </div>
 
-            <div class="row" id="box1" ng-if="results.length > 0"> 
-                <div class="container-fluid" id="history">
-                    <div id="scrollbox">
-                        <table class="table" cellspacing="0" id="myTable">
-                            <thead>
-                                <tr>
-                                    <th> <input type="checkbox" value="" id="check1"></th>
-                                    <th>TITLE</th>
-                                    <th>LONG URL</th>
-                                    <th>SHORT URL</th>
-                                    <th>CREATED</th>
-                                    <th>STATS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historytable"> 
-                                <tr ng-repeat="result in results | beginWith:(currentPage - 1) * pageSize | limitTo:pageSize | filter: search">
-                                    <td><span class="glyphicon glyphicon-pencil" ng-click="editData(result)" style="cursor:pointer"></span></td>
-                                    <td>{{result.title}}</td> 
-                                    <td>{{result.longUrl}}</td>
-                                    <td>{{result.shortUrl}}</td>
-                                    <td>{{result.timeCreated | date:"hh:mm:ss a"}}</td>
-                                    <td style="text-align:center"><a class="btn btn-default btn-xs" style="border:0" data-toggle="modal" href="#/stat/{{$index}}" >view</a></td> 
-                                </tr>
-                                <tr id="editInput" style="display:none; ">
-                                    <td><span class="glyphicon glyphicon-repeat" style="cursor:pointer" ng-click="saveData(current)"></span></td>
-                                    <td><input type=text style="border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);" ng-model="current.title" value="{{current.title}}"></td>   
-                                    <td><input type=text style="border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);" ng-model="current.longUrl" value="{{current.longUrl}}"></td>
-                                    <td><input type=text style="border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);" ng-model="current.shortUrl" value="{{current.shortUrl}}"></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>    
-                            </tbody>
-                        </table>
+            <div id='subjumbo' class='container-fluid'>
+                <div class="topelement">
+                    <button id="primarybtn" class="btn primary">Shorten URL</button>
+                </div> 
+                <div class="row">
+                    <div id="inputGroup">
+                        <form id="inputForm" name="FORM" novalidate>
+                            <div class="formlable">Title</div>
+                            <div id="titleinput" class="" style="padding-right:0;">
+                                <input id="idtitle" type="text" class="form-control" name="Title" ng-model="newrow.title" required="true" placeholder="Creat link title...">
+                            </div>
+
+                            <div class="formlable">URL</div>
+                            <div class="" style="padding-right:0;">
+                                <input id="longurl" name="longUrl" type="text" class="form-control" ng-model="newrow.longUrl" ng-required="true" placeholder="Paste a URL here...">
+                            </div>
+
+                            <div class="formlable">Alias (Optional)</div>
+                            <div class="" style="padding-right:0;">
+                                <input id="" name="" type="text" class="form-control" ng-model="newrow.alias" ng-required="true" placeholder="Create alias...">
+                            </div>
+                            
+                            <div style="text-align:center; margin-bottom:0;">    
+                                <button class="btn blue" type="button" background="#E91E63" id="shortenbtn" name="submit" ng-model="triggered" ng-click="addRow()" ng-disabled="(FORM.longUrl.$invalid)||(FORM.Title.$invalid)">Shorten</button>
+                            </div>    
+                        </form>    
                     </div>
                 </div>
-            </div>
-            
-            <div class="row" id="box2" ng-if="results.length > 0">
-                <div class="col-sm-7" style="padding:0">
-                    <ul id="pagination" uib-pagination total-items="results.length" ng-model="currentPage" items-per-page="pageSize" max-size="4" class="pagination-sm" boundary-link-numbers="true" rotate="false"></ul>
-                </div>
-                <div class="col-sm-5" style="padding:0; margin-top:0">
-                    <input class="form-control input-sm" id="searchList" type="text" ng-model="search" placeholder=" Search in the list ...">
-                </div>
-            </div> 
-  
-        </div>
-        <br><br><br><br>
-</div>    
 
-<div ng-include="'includes/pictures.html'"></div>
+                <div class="row" id="box1">
+                    <div class="container-fluid" id="history">
+                        <div id="editInput">
+                            <table class="table noborder" cellspacing="0">
+                                <tbody> 
+                                    <tr>
+                                        <td><a id="saveIcon" class="glyphicon glyphicon-floppy-disk" ng-click="saveData(current)"></a></td>
+                                        <td>Title: <input class="editD" type=text ng-model="current.title" value="{{current.title}}"></td>   
+                                        <td>Short URL: <input class="editD" type=text ng-model="current.shortUrl" value="{{current.shortUrl}}"></td>
+                                        <td>Alias: <input class="editD" type=text ng-model="current.alias" value="{{current.alias}}"></td>
+                                    </tr>    
+                                </tbody>
+                            </table>
+                        </div>
+                        <div  class="whitebgbox" ng-repeat="result in results | beginWith:(currentPage - 1) * pageSize | limitTo:pageSize | filter: searchText">
+                            <div class="innerdiv">
+                                <div style="font-weight:bold; color:white;">{{result.title}}</div>
+                                <div class="rowtd">Short URL: {{result.shortUrl}}</div>
+                                <div class="rowtd">Alias: {{result.alias}}</div>
+                                <div class="clear"></div>
+                                <div class="rowtd">Owner: {{result.owner}}</div>
+                                <div class="rowtd">Created: {{result.timeCreated | date:"MM/dd/yyyy"}}</div>
+                                <div class="clear"></div>
+                            </div>    
+                            <div class="menubox" style="text-align:center;"><a id="showToggle" ng-click="clicked=!clicked"><span class="glyphicon glyphicon-option-horizontal"></span><span class="glyphicon glyphicon-option-horizontal"></span></a></div>
+                            <div id="hiddenData" ng-if="clicked" class="innerdiv">
+                                <div class="rowtd60">Long URL: {{result.longUrl}}</div>
+                                <div class="clear"></div>     
+                                <div class="clear"></div>    
+                                <div class="rowtd">Total Views: {{result.externalviews + result.internalviews}}</div>
+                                <div class="clear"></div>
+                                <div class="rowtd">External Views: {{result.externalviews}}</div>
+                                <div class="rowtd">Internal Views: {{result.internalviews}}</div>
+                                <div class="clear"></div>
+                                <div style="text-align:center;">
+                                    <div class="btn-group" role="group">
+                                        <a type="button" class="btn btn-secondary" ng-click="editData(result)">Edit</a>
+                                        <a type="button" class="btn btn-secondary" href="#/stat/{{$index}}">View Stats</a>
+                                        <a type="button" class="btn btn-secondary" ng-click="removeRow(result)">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="topelement">
+                    <ul id="pagination" uib-pagination total-items="results.length" ng-model="currentPage" items-per-page="pageSize" max-size="4" class="pagination" boundary-link-numbers="true" rotate="false" ng-show="results.length > 4"></ul>
+                </div>
+            </div>
+            <br>
+    </div>
+
+    <div ng-include="'includes/pictures.html'"></div>
+</div>    
 <!--http://placehold.it/150x80?text=IMAGE*/-->

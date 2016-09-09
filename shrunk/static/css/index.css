@@ -1,66 +1,35 @@
-/* media queries */
-/* Iphone 5s (portrait) ----------- */
-@media only screen and (max-width:400px) {
-
-}
-
-/* Samsumg s6, Samsung note iphone 6, iphone 6 plus(portrait) ----------- */
-@media only screen and (max-width:550px) and (min-width:401px) {
-	
-}
-
-/* small tablets (portrait) ----------- */
-@media only screen and (max-width:750px) and (min-width:551px) {
-
-}
-
-
 /*-------------------main--------------------*/
-html{margin:0; padding:0;}
+html{margin:0; padding:0; overflow-x: hidden; border: 0; outline: 0;}
 
 body{
-margin:0;	
-padding:0;
+margin:0; padding:0; border: 0; outline: 0;
 background:url('../assets/purebg.jpg') center;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
 background-size: cover;
+background-repeat: no-repeat;    
 overflow-x: hidden;
+min-height: 100%;
+/* equal to footer height */     
 }
 
 nav.navbar {
-border-radius: 0px;	
+border-radius: 0px; border: 0px; background-color: rgba(255,255,255,0);    
 }
 
-#urlshortener{
-color:rgb(204, 0, 51);
-font-weight: bold;    
-}
 
-#urlshortener:hover{
-cursor: default;	
-}
 
 #rulogo {
-width:auto;
-height: 115%;
-margin-top:5%;
-position: relative;
+width: 70%; height: auto%; margin-top:5%; position: relative; margin-bottom: 40px;    
 }
 
 .jumbotron{
-padding: 0;
-margin: 0;
-border:0px;
-background-color: rgba(255,255,255,0);
+padding: 0; margin: 0; border:0px; background-color: rgba(255,255,255,0);
 }
 
 #subjumbo{
-position:inherit;
-height: auto;
-width:60%; 
-margin-left:20%;	
+position:inherit; height: auto; width:60%; margin-left:20%; padding-left:0; padding-right: 0;    
 }
 
 #logobox{
@@ -71,101 +40,68 @@ padding-top:0;
 
 .breadcrumb{margin-bottom: 0;}
 
-#searchbox{
-position: relative;
-z-index: 10;
-top: 75%;
-margin-right: auto;
-}
 
-.input-group .btn{
-background: #E91E63;
-color: white;
-width: 90px;
-}
 
-.input-group .btn:disabled:hover:not([enabled="enabled"]) {
-background: #E91E63;
-color: white;
-}
-
-.input-group .btn:hover{
-background: #eb3472;
-color: white;
-top:0.5px;
-left:2px;
+.btn:hover{
+top:0.5px; left:1px; border: 0px;
 -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
 -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
-border: 0px; 
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);    
 }
 
+.btn:active, html:active, body:active {
+outline: none;
+border: none;
+}
+
+.btn:focus, html:focus, body:focus  {outline:0;}
+
 #copyright{
-margin-bottom: 15px;
-font-size:14px;	
+margin-bottom: 15px; font-size:14px;	
 }
 
 #focuspic{
-width: 80%;
-height: auto;
-margin-left: 10%;
-margin-right: 10%;
+width: 40%; height: auto;
 }
 
 #linktitle{
-padding-left: 4px;
-padding-bottom: 5px;
-overflow: hidden;
-padding-right: 0;
-width: 70%;   
+padding-left: 4px; padding-bottom: 5px; overflow: hidden; padding-right: 0; width: 70%;   
 }
 
 #linktitle:hover{
-color:white;
-cursor:pointer; 
+color:white; cursor:pointer; 
 }
 
-#titleinput{
-margin-bottom: 15px;	
+form > div{
+margin-bottom: 8px; width:60%; margin-left: auto; margin-right: auto;    
 }
 
 #history{
-margin-top: 20px;
-margin-bottom: 0px;
-padding: 0;	
+margin-top: 0x; margin-bottom: 0; padding: 0;
 }
 
 ul#pagination {
-margin-top:0; 
+margin:0 auto 0 auto;
 }
 
 ul#pagination li a{
-background-color: rgba(255, 255, 255, 0.2);
-color: black;
-border:0;    
+background-color: rgba(255, 255, 255, 0.4); color: black; border:0;    
 }
 
 ul#pagination li.active a{
-background-color: rgba(255, 255, 255, 0.6);
-color: black;
-border:0;    
+background-color: rgba(255, 255, 255, 0.6); color: black; border:0;    
 }
 
 #searchList {
-background-color: rgba(255, 255, 255, 0.6);
-border:0;
-height:28px;
+background-color: rgba(255, 255, 255, 0.6); border:0; height:28px;
 }
 
 #hiddentoggle{
-margin-bottom: 20px;
-padding: 0;
-display: none;
+margin-bottom: 20px; padding: 0; display: none;
 }
 
 #box1{
-padding-bottom: 0px;
-margin-bottom: 0px;	
+padding-bottom: 0px; margin-bottom: 0px;
 }
 
 table{
@@ -173,22 +109,15 @@ margin-bottom: 0px;
 }
 
 .imgtitle{
-font-weight:bold;
-color:white; 	
+font-weight:bold; color:white; 	
 }
 
 .img-responsive{
-margin-left: auto;
-margin-right: auto;
-width: 70%;
+margin-left: auto; margin-right: auto; width: 70%;
 }
 
 .modalimg{
 width: 100%;	
-}
-
-#myTable, #tablehead {
-background-color: rgba(255, 255, 255, 0.2);
 }
 
 #myTable_length{
@@ -208,18 +137,11 @@ background-color: rgba(255, 255, 255, 0.1);
 }
 
 #page {
-padding-top:5px;
-margin-top:10px; 	
-}
-
-a#statsbtn:hover{
-background-color: rgba(255, 255, 255, 0.9);
-border:1px solid grey;    
+padding-top:5px; margin-top:10px; 	
 }
 
 /*
 #scrollbox{
-max-height:237px; 
 overflow-y:auto; 
 }
 
@@ -228,68 +150,264 @@ overflow-y:auto;
 #scrollbox { overflow: -moz-scrollbars-none; }
 */
 
+#inputGroup {
+height: 0; margin-bottom:0; margin-top: 0; background: rgba(255,255,255,0.4); border-radius: 4px; transition: 0.4s cubic-bezier(1, .01, .27, 1.01);
+/*display: none;   */
+}
+
 /* -----animation----- */
 
-#titleinput.ng-enter {
-  transition: 0.3s ease all;
-  opacity: 0;
+main.ng-enter, .whitebgbox.ng-enter, #hiddenData.ng-enter {
+  transition: all 0.3s ease; opacity: 0; 
 }
  
-#titleinput.ng-enter.ng-enter-active {
+main.ng-enter.ng-enter-active, .whitebgbox.ng-enter.ng-enter-active, #hiddenData.ng-enter-active {
   opacity: 1;
 }
 
-#titleinput.ng-leave {
-  transition: 0.3s ease all;
-  opacity: 1;
+main.ng-leave, .whitebgbox.ng-leave, #hiddenData.ng-leave {
+  transition: all 0.3s ease; opacity: 1;
 }
  
-#titleinput.ng-leave.ng-leave-active {
-  opacity: 0;
-}
-
-main.ng-enter {
-  transition: 0.3s ease all;
-  opacity: 0; 
-}
- 
-main.ng-enter.ng-enter-active {
-  opacity: 1;
-}
-
-main.ng-leave {
-  transition: 0.3s ease all;
-  opacity: 1;
-}
- 
-main.ng-leave.ng-leave-active {
+main.ng-leave.ng-leave-active, .whitebgbox.ng-leave.ng-leave-active, #hiddenData.ng-leave-active {
   opacity: 0;
 }
 
-/*
-#historytable tr.ng-enter {
-  transition: 0.5s ease all;
-  opacity: 0;
-}
- 
-#historytable tr.ng-enter.ng-enter-active {
-  opacity: 1;
+/* -----animation----- */
+
+.nav.navbar-nav > li {
+  padding: 0 0 0 15px; 
 }
 
-#historytable tr.ng-leave {
-  transition: 0.3s ease all;
-  opacity: 1;
+.nav.navbar-nav > li > a {
+  color:white;    
 }
- 
-#historytable tr.ng-leave.ng-leave-active {
-  opacity: 0;
-}
-*/
 
-#pagination.ng-enter {
-  transition: 0.3s ease all;
-  opacity: 0; 
+.nav.navbar-nav > li > a:focus {
+  color:white;    
 }
- 
-#pagination.ng-enter.ng-enter-active {
-  opacity: 1;
+
+.nav.navbar-nav > li > a:active {
+  color:white;    
+}
+
+.nav.navbar-nav > li:nth-child(1) a {
+  font-size: 20px;  
+}
+
+.nav.navbar-nav > li:nth-child(1) a:hover {
+  cursor: pointer;   
+}
+
+.nav.navbar-nav > li > a:hover {
+  color:aqua;    
+}
+
+#searchIn{
+width: 100%; height:25px; padding-right: 10px; border:0.5px solid white;
+background-image: url('../assets/mgicon.png');
+background-repeat: no-repeat;
+background-position: right;
+background-size: 8%;    
+}
+
+.btn-secondary, .primary, #primarybtn{
+background:rgba(255,255,255,0.1); border-style: inset; border:1px solid white; border-radius:4px; color: white; margin-top:5px;  
+}
+
+.blue {
+background: aqua; border:0; color:black;    
+}
+
+#primarybtn:hover, .blue:hover, .btn-secondary:hover, .primary:hover{
+background: aqua; border:0; color:black;
+}
+
+.blue:disabled {
+background:rgba(255,255,255,0.1); border-style: inset; border:1px solid white; color: white;    
+}
+
+.blue:disabled:hover:not([enabled="enabled"]) {
+background:rgba(255,255,255,0.1); border-style: inset; border:1px solid white; color: white;    
+}
+
+.formlable{
+margin-left: auto; margin-right: auto; text-align: center; Padding:0; line-height: 100%; vertical-align: middle;
+}
+
+.formlable > lable {
+padding: 0; margin: 0;    
+}
+
+.mainBox{
+margin-bottom: 20px; background: rgba(255,255,255,0.4); border-radius: 4px; text-align: center; width:60%; margin-left: 20%; margin-right: 20%;
+padding-top: 20px; padding-bottom: 1px;   
+}
+
+.whitebgbox {
+background:rgba(255,255,255,0.4); border-radius:4px; padding-top:10px; padding-bottom:10px; margin-bottom: 0; margin-top: 20px; width: 49%; display: inline-block; vertical-align:top;
+}
+
+#history > .whitebgbox:nth-child(even) {
+margin-right: 2%;    
+}
+
+.table-borderless tr td, .table-borderless tr{
+    border: 0 !important;
+}
+
+.table-borderless{
+margin:0;    
+}
+
+
+#showToggle {
+    cursor:pointer;
+}
+
+.editD {
+    border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);
+    padding-left:10px;
+}
+
+#editInput {
+    display:none; background: rgba(255,255,255,0.4); border-radius: 4px; border:0.5px solid rgba(255,255,255,0.6);
+}
+
+.noborder, .noborder tbody tr, .noborder tbody tr td{
+    border:0 !important; margin:0;
+}
+
+#saveIcon {
+    cursor:pointer; color:white; vertical-align: middle; font-size: 18px;
+}
+
+#saveIcon:hover {
+    text-decoration: none; color:aqua;
+}
+
+footer.container-fluid, footer.container-fluid > ul, footer.container-fluid > ul >li{
+    background: rgba(255,255,255,0);
+}
+
+.rowtd {
+    width: 49%; display: inline-block; vertical-align: text-top;
+}
+
+.clear {
+    clear:both;
+}
+
+.rowtd60 {
+    width: 90%;
+}
+
+.innerdiv {
+    margin-left: 5%; margin-right: 5%;
+}
+
+.menubox {
+    margin-top: 5px; margin-bottom: 0; padding: 0; 
+}
+
+.menubox > a > span {
+    margin-bottom: 0; padding: 0; color: white;
+}
+
+.topelement {
+    text-align: center; clear:both; margin-top: 20px; margin-bottom: 20px;
+}
+
+.topline > .topelement:nth-child(1), .topline > .topelement:nth-child(2){
+    text-align: right; margin-right: 10%;
+}
+
+.topline > .topelement:nth-child(3){
+    text-align: right;
+}
+
+#searchframe {
+    text-align: right; float: right; padding: 0; margin-top: 15px;
+}
+
+#inputForm {
+visibility:collapse; padding-top: 20px; padding-bottom: 20px;
+}
+
+#dialogoverlay {
+	display: none; opacity: 0.6; top: 0px; right: 0px; background: #FFF; z-index: 10; position:fixed; transition: all 0.5s ease;
+}
+
+.mainbox0 {
+    margin-top:20px; margin-bottom: 20px; text-align: left; width:80%; margin-left: 10%; margin-right: 10%;   
+}
+
+.mainbox0.center {
+    margin-bottom: 20px; text-align: center; width:80%; margin-left: 10%; margin-right: 10%;   
+}
+
+.space20 {
+    margin-bottom: 20px;
+}
+
+.line {
+    display: inline-block; padding-top: 0; line-height: 100%;
+}
+
+.blockeduser {
+   text-align:left; margin-bottom:10px; width:47%; display: inline-block; background: rgba(255,255,255,0.3); border-radius: 4px; padding: 5px 5px 5px 5px;
+}
+
+.mainbox0 > .blockeduser:nth-child(odd){
+    margin-right: 6%;
+} 
+
+.title100 {
+    line-height: 100%; margin-top:0; padding-top: 0; padding-bottom: 0px;
+}
+
+.suggestions-list {
+	position: absolute;
+	list-style-type: none;
+	margin:0px;
+	padding:0;
+	overflow:auto;
+}
+.suggestions-list li {
+	color: #000000;
+	padding: 5px 10px;
+	height:20px;
+	cursor: pointer;
+	background: #f5f5f5;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	width:382px;
+}
+.suggestions-list li:last-child{
+	border-bottom: 1px solid #ddd;
+}
+.suggestions-list li:hover {
+	background: #ddd;
+}
+.suggestions-list li:active,
+.suggestions-list li.active {
+	color: #FFFFFF;
+	background: #990000;
+	width:382px;
+}
+.suggestions-list:focus{
+	outline:none;
+}
+.selections {
+    background: rgba(255,255,255,0.6); border:0; border-radius: 3px; float:right;
+}
+
+
+
+.wrap {
+    word-break: break-all;
+}
+
+.topalign {
+    vertical-align: top;
+}
