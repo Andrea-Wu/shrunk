@@ -3,27 +3,27 @@ var myApp = angular.module('shrunkApp', ['ngAnimate', 'ui.bootstrap', 'ngRoute']
 myApp.config(['$routeProvider', function($routeProvider){
     $routeProvider
     .when('/',{
-        templateUrl: '/static/views/home.html',
+        templateUrl: 'views/home.html',
         controller: 'urlShortener'
     })
     .when('/stat/:id',{
-        templateUrl: '/static/views/stats.html',
+        templateUrl: 'views/stats.html',
         controller: 'viewController'
     })
     .when('/blockurl',{
-        templateUrl: '/static/views/blockurl.html',
+        templateUrl: 'views/blockurl.html',
         controller: 'urlShortener'
     })
     .when('/usermgmt',{
-        templateUrl: '/static/views/usermgmt.html',
+        templateUrl: 'views/usermgmt.html',
         controller: 'urlShortener'
     })
     .when('/blacklist',{
-        templateUrl: '/static/views/blacklist.html',
+        templateUrl: 'views/blacklist.html',
         controller: 'urlShortener'
     })
     .otherwise({
-        redirectTo: '/static/views/home.html',
+        redirectTo: 'views/home.html',
         controller: 'urlShortener'
     })   
 }]);
