@@ -1,0 +1,35 @@
+<div class="jumbotron">
+    <div class="container" id="largebox"> 
+      <div class="row">
+        <div class="col-sm-7">
+          
+        </div>
+        <div class="col-sm-5">
+           <div class="container" id='formbox'>
+                <h2>LOGIN</h2>
+
+                <form ng-submit="index.html" name="userForm" novalidate>
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input type="username" class="form-control" id="userid" name="name" ng-model="user.name" placeholder="Enter Username" ng-required="true"><div class="feed" id="feedback" ng-show="userForm.name.$touched && userForm.name.$invalid">Enter valid username</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" class="form-control" id="pwd" name="pass" ng-model="user.pass" placeholder="Enter password" ng-required="true">
+                    </div>
+
+                    <div class="checkbox">
+                        <label><input type="checkbox"> Remember me</label>
+                    </div>
+                    <a type="submit" class="btn" id="submitbtn" ng-disabled="(userForm.name.$invalid) || (userForm.pass.$invalid)" href="../index.html">Login</a>
+                </form>
+                
+                <h6><a href=''>Forgot Password?</a></h6>
+                <h6><a href="#/signup">New to DVS? Create an Account</a></h6>
+              </div>
+        </div>
+      </div>
+
+    </div>
+    </div>

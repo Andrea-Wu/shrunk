@@ -1,0 +1,27 @@
+<br>
+<div class="mainBox" ng-controller="mainCtrl">
+    <div class="title100">Title Goes Here</div>
+    <br>
+    <div class="center">
+        <form class="form-inline">
+            <select class="form-control">
+                <option selected value="">Geographic Granularity</option>
+                <option value="nation">Nation</option>
+                <option value="market">Market</option>
+                <option value="region">Region</option>
+                <option value="sub-region">Sub-region</option>
+            </select>
+            <label class="mr-sm-2">Start:</label>
+            <input type="date" class="form-control" ng-model="dateStart" />
+            <label class="mr-sm-2">End:</label>
+            <input type="date" class="form-control" ng-model="dateEnd" />
+            <input type="button" class="btn btn-sm primary" ng-click="newDataset()" style="margin-top:0; height:32px;" value="Genderate Charts" /> </form>
+    </div>
+    <br>
+    <br>
+    <div id="ipMap" style="width: 100%; height: 70vh;"></div>
+</div>
+<br>
+<br>
+<br>
+<br>
