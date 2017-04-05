@@ -2,7 +2,7 @@
 
 Sets up a Flask application for the main web server.
 """
-from flask import Flask, render_template, make_response, request, redirect, g
+from flask import Flask, render_template, make_response, request, redirect, g, jsonify
 from flask_login import LoginManager, login_required, current_user, logout_user
 from flask_auth import Auth
 
@@ -693,3 +693,21 @@ def admin_unban_user():
 
     return redirect("/admin/blacklist")
 
+# Defining JSON API Routes Here
+
+@app.route("/api/users", methods=["GET"])
+@login_required
+@admin_required(unauthorized_admin)
+def get_users():
+    """
+        Gets users 
+    """
+    
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+
+    users = client.get_users()[0]
+    return jsonify(users)
