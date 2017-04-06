@@ -1,4 +1,4 @@
-<div ng-controller="appBody">
+<div ng-controller="shorten">
     <div class="jumbotron">
             <div class="row" style="text-align:center;"> 
                 <img id='focuspic' src='assets/shrunkfocus.png' />
@@ -36,16 +36,12 @@
                 <div class="row" id="box1">
                     <div class="container-fluid" id="history">
                         <div id="editInput">
-                            <table class="table noborder" cellspacing="0">
-                                <tbody> 
-                                    <tr>
-                                        <td><a id="saveIcon" class="glyphicon glyphicon-floppy-disk" ng-click="saveData(current)"></a></td>
-                                        <td>Title: <input class="editD" type=text ng-model="current.title" value="{{current.title}}"></td>   
-                                        <td>Short URL: <input class="editD" type=text ng-model="current.shortUrl" value="{{current.shortUrl}}"></td>
-                                        <td>Alias: <input class="editD" type=text ng-model="current.alias" value="{{current.alias}}"></td>
-                                    </tr>    
-                                </tbody>
-                            </table>
+                            <div class="row width90 verticalalign">
+                                <div class="col-sm-3 no-padding">Title: <input class="editD" type=text ng-model="current.title" value="{{current.title}}"></div>
+                                <div class="col-sm-4 no-padding">Short URL: <input class="editD" type=text ng-model="current.shortUrl" value="{{current.shortUrl}}"></div>
+                                <div class="col-sm-3 no-padding">Alias: <input class="editD" type=text ng-model="current.alias" value="{{current.alias}}"></div>
+                                <div class="col-sm-1 no-padding"><button id="saveIcon" class="btn primary" ng-click="saveData(current)">save</button></div>
+                            </div>
                         </div>
                         <div  class="whitebgbox" ng-repeat="result in results | beginWith:(currentPage - 1) * pageSize | limitTo:pageSize | filter: searchText">
                             <div class="innerdiv">
@@ -53,19 +49,18 @@
                                 <div class="rowtd">Short URL: {{result.shortUrl}}</div>
                                 <div class="rowtd">Alias: {{result.alias}}</div>
                                 <div class="clear"></div>
-                                <div class="rowtd">Owner: {{result.owner}}</div>
+                                <div class="rowtd">Long URL: {{result.longUrl}}</div>
                                 <div class="rowtd">Created: {{result.timeCreated | date:"MM/dd/yyyy"}}</div>
                                 <div class="clear"></div>
                             </div>    
                             <div class="menubox" style="text-align:center;"><a id="showToggle" ng-click="clicked=!clicked"><span class="glyphicon glyphicon-option-horizontal"></span><span class="glyphicon glyphicon-option-horizontal"></span></a></div>
                             <div id="hiddenData" ng-if="clicked" class="innerdiv">
-                                <div class="rowtd60">Long URL: {{result.longUrl}}</div>
                                 <div class="clear"></div>     
                                 <div class="clear"></div>    
-                                <div class="rowtd">Total Views: {{result.externalviews + result.internalviews}}</div>
+                                <div class="rowtd">Total Views: {{result.externalView + result.internalView}}</div>
                                 <div class="clear"></div>
-                                <div class="rowtd">External Views: {{result.externalviews}}</div>
-                                <div class="rowtd">Internal Views: {{result.internalviews}}</div>
+                                <div class="rowtd">External Views: {{result.externalView}}</div>
+                                <div class="rowtd">Internal Views: {{result.internalView}}</div>
                                 <div class="clear"></div>
                                 <div style="text-align:center;">
                                     <div class="btn-group" role="group">
@@ -85,6 +80,6 @@
             <br>
     </div>
 
-    <div ng-include="'includes/pictures.html'"></div>
+<!--    <div ng-include="'includes/pictures.html'"></div>-->
 </div>    
 <!--http://placehold.it/150x80?text=IMAGE*/-->

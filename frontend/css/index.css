@@ -3,25 +3,29 @@ html{margin:0; padding:0; overflow-x: hidden; border: 0; outline: 0;}
 
 body{
 margin:0; padding:0; border: 0; outline: 0;
-background:url('../assets/purebg.jpg') center;
+background:url('../assets/purebg.jpg');
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
 background-size: cover;
 background-repeat: no-repeat;    
 overflow-x: hidden;
-min-height: 100%;
+height: 100%;
+width: 100%;    
 /* equal to footer height */     
 }
 
-nav.navbar {
-border-radius: 0px; border: 0px; background-color: rgba(255,255,255,0);    
+
+main {
+    min-height: 90vh;
+}
+footer{
+    width: 100%;
+    bottom:0;    
 }
 
-
-
 #rulogo {
-width: 70%; height: auto%; margin-top:5%; position: relative; margin-bottom: 40px;    
+width: 70%; height: auto; margin-top:5%; position: relative; margin-bottom: 40px;    
 }
 
 .jumbotron{
@@ -39,8 +43,6 @@ padding-top:0;
 .breadcrumb, footer{ background: #EEEEEE; }
 
 .breadcrumb{margin-bottom: 0;}
-
-
 
 .btn:hover{
 top:0.5px; left:1px; border: 0px;
@@ -155,7 +157,7 @@ height: 0; margin-bottom:0; margin-top: 0; background: rgba(255,255,255,0.4); bo
 /*display: none;   */
 }
 
-/* -----animation----- */
+/* ----------- */
 
 main.ng-enter, .whitebgbox.ng-enter, #hiddenData.ng-enter {
   transition: all 0.3s ease; opacity: 0; 
@@ -173,7 +175,11 @@ main.ng-leave.ng-leave-active, .whitebgbox.ng-leave.ng-leave-active, #hiddenData
   opacity: 0;
 }
 
-/* -----animation----- */
+/* ------------ */
+
+nav.navbar {
+border-radius: 0px; border: 0px; background-color: rgba(255,255,255,0);    
+}
 
 .nav.navbar-nav > li {
   padding: 0 0 0 15px; 
@@ -195,12 +201,25 @@ main.ng-leave.ng-leave-active, .whitebgbox.ng-leave.ng-leave-active, #hiddenData
   font-size: 20px;  
 }
 
-.nav.navbar-nav > li:nth-child(1) a:hover {
-  cursor: pointer;   
+
+.nav.navbar-nav > li a:hover {
+  cursor: default;
+  color:white;
 }
 
-.nav.navbar-nav > li > a:hover {
-  color:aqua;    
+.nav.navbar-nav > li:nth-child(1) a:hover {
+  cursor: pointer;
+  color:aqua;
+}
+
+.nav.navbar-nav > li:nth-child(2) a:hover {
+  cursor: pointer;
+  color:aqua;
+}
+
+.nav.navbar-nav > li:nth-child(5) a:hover {
+  cursor: pointer;
+  color:aqua;
 }
 
 #searchIn{
@@ -219,7 +238,7 @@ background:rgba(255,255,255,0.1); border-style: inset; border:1px solid white; b
 background: aqua; border:0; color:black;    
 }
 
-#primarybtn:hover, .blue:hover, .btn-secondary:hover, .primary:hover{
+#primarybtn:hover, .blue:hover, .btn-secondary:hover, .primary:hover, #saveIcon.primary:hover{
 background: aqua; border:0; color:black;
 }
 
@@ -245,7 +264,7 @@ padding-top: 20px; padding-bottom: 1px;
 }
 
 .whitebgbox {
-background:rgba(255,255,255,0.4); border-radius:4px; padding-top:10px; padding-bottom:10px; margin-bottom: 0; margin-top: 20px; width: 49%; display: inline-block; vertical-align:top;
+background:rgba(255,255,255,0.4); border-radius:4px; padding-top:10px; padding-bottom:10px; margin-bottom: 0; margin-top: 20px; width: 100%; display: inline-block; vertical-align:top;
 }
 
 #history > .whitebgbox:nth-child(even) {
@@ -268,10 +287,20 @@ margin:0;
 .editD {
     border-radius:3px; border:0px; background-color:rgba(255,255,255,0.6);
     padding-left:10px;
+    width: 70%;
 }
 
 #editInput {
     display:none; background: rgba(255,255,255,0.4); border-radius: 4px; border:0.5px solid rgba(255,255,255,0.6);
+}
+
+.width90{
+    width:90%;
+    margin: 10px 0 10px 5%;
+}
+
+.no-padding {
+    padding-left: 0;
 }
 
 .noborder, .noborder tbody tr, .noborder tbody tr td{
@@ -315,7 +344,7 @@ footer.container-fluid, footer.container-fluid > ul, footer.container-fluid > ul
 }
 
 .topelement {
-    text-align: center; clear:both; margin-top: 20px; margin-bottom: 20px;
+    text-align: center; clear:both; margin-top: 20px; margin-bottom: 20px; height: 40px;
 }
 
 .topline > .topelement:nth-child(1), .topline > .topelement:nth-child(2){
@@ -402,8 +431,6 @@ visibility:collapse; padding-top: 20px; padding-bottom: 20px;
     background: rgba(255,255,255,0.6); border:0; border-radius: 3px; float:right;
 }
 
-
-
 .wrap {
     word-break: break-all;
 }
@@ -411,3 +438,25 @@ visibility:collapse; padding-top: 20px; padding-bottom: 20px;
 .topalign {
     vertical-align: top;
 }
+
+#dialogoverlay, .overlay {
+/*    display: none;*/
+    opacity: 0.6;
+    top: 0px;
+    right: 0px;
+    background: #FFF;
+    z-index: 10;
+    position: fixed;
+    transition: all 0.5s ease;
+}
+
+#saveIcon {height: 22px; width:80px; padding:0; line-height: 100%; margin: 0; font-weight:120; }
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: auto;
+    padding-right: auto;
+}
+
+.form-inline .form-control{margin-right: 5%;}

@@ -3,21 +3,29 @@
 <head>
     <title>shrunk</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1">
     <link rel="shortcut icon" href="assets/r.ico" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link href="css/index.css" rel="stylesheet" type="text/css" />
     <link href="css/sidebar.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="lib/angular.min.js"></script>
     <script src="controller/app.js"></script>
     <script src="lib/angular-animate.min.js"></script>
     <script src="lib/ui-bootstrap-custom-tpls-2.0.1.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
+    <script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script>
+    <script src="lib/angular-chart.min.js"></script>
+    <script src="controller/GetData.js"></script>
+    <script src="controller/indexCtrl.js"></script>
+    <script src="controller/shorten.js"></script>
+    <script src="controller/statController.js"></script>
+
 </head>
 
-<body ng-controller="urlShortener">
+<body ng-controller="indexCtrl">
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li>
@@ -40,7 +48,8 @@
             </li>
         </ul>
     </div>    
-    <div id="dialogoverlay"></div>
+    <div id="dialogoverlay" class="overlay"></div>
+    
     <div id="shrunk">
         <header>
             <nav class="navbar navbar-default">
@@ -49,11 +58,7 @@
                         <li><a id="openicon"><span class="glyphicon glyphicon-menu-hamburger"></span></a></li>
                         <li><a id="urlshortener" href="#/"><span class="glyphicon glyphicon-home"></span> My URL Shortener</a></li>
                         <li><a href="">NetID</a></li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Administrator<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="">Power User</a></li>
-                            <li><a href="">User</a></li>
-                        </ul> 
+                        <li><a href="">User Group: {{userGroup[0]}}</a>
                         </li>  <!--add a modal  what an admin user can do-->
                         <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>        
                     </ul>
@@ -65,6 +70,7 @@
             </nav>
         </header>
         <main ng-view ></main>
+        <div class="pushSpace"></div>
         <footer ng-include="'includes/footer.html'" style="background:rgba(255,255,255,0);"></footer>
     </div>
 </body>
