@@ -9,23 +9,25 @@
         </div>
         <div style="text-align:center; margin-top:10px; margin-bottom:10px;">
             <h4>Statistics for <span style="color:#4169E1">{{result.title}}</span></h4>
+            <h4>Statistics for <span style="color:#4169E1">{{newData[1].internalView}}</span></h4>
         </div>
         <br>   
         <div class="center">
         <form class="form-inline">
-            <select class="form-control" ng-model="kpiNum">
+            <select class="form-control" ng-model="key">
                 <option selected value="">Sort By</option>
-                <option value="-kpi1">Date - Descending</option>
-                <option value="-kpi2">Date - Ascending</option>
-                <option value="-kpi3">Internal Views</option>
-                <option value="-kpi4">External Views</option>
-                <option value="-kpi5">Total View</option>
+                <option value="dateViewedDesc">Date - Descending</option>
+                <option value="dateViewedAsc">Date - Ascending</option>
+                <option value="internalView">Internal Views</option>
+                <option value="externalView">External Views</option>
+                <option value="totalView">Total View</option>
+                <option value="bounceRate"> Bounce Rate</option>
             </select>
             <label class="mr-sm-2">Start:</label>
             <input type="date" class="form-control" ng-model="dateStart" />
             <label class="mr-sm-2">End:</label>
             <input type="date" class="form-control" ng-model="dateEnd" />
-            <input type="button" class="btn btn-sm primary" ng-click="newDataset()" style="margin-top:0; height:32px;" value="Genderate Table" /> </form>
+            <input type="button" class="btn btn-sm primary" ng-click="newDataset()" style="margin-top:0; height:32px;" value="Generate Table" /> </form>
         </div>
     <br>
 
@@ -42,8 +44,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="row in newData | beginWith:(currentPage - 1) * tableSize | limitTo:tableSize | orderBy: kpiNum |filter:searchText" ng-click="openModal($index)">
-                <td> {{row.dateViewed}} </td>
+            <tr ng-repeat="row in newData | beginWith:(currentPage - 1) * tableSize | limitTo:tableSize | filter: searchText" ng-click="openModal($index)">
+                <td> {{row.dateViewed | date}} </td>
                 <td> {{row.internalView + row.externalView}} </td>
                 <td> {{row.internalView}} </td>
                 <td> {{row.externalView}} </td>

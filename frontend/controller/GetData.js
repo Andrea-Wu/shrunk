@@ -25,7 +25,7 @@ myApp.service('GetData', function ($http) {
     
     self.getStatsJson = function () {
         var promise4 = $http.get('../data/stats.json').then(function (response) {
-            return response.data;
+           return response.data;
         });
         return promise4;
     }
