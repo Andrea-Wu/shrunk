@@ -695,6 +695,25 @@ def admin_unban_user():
 
 # Defining JSON API Routes Here
 
+@app.route("/api/blocked_urls", methods=["GET"])
+@login_required
+@admin_required(unauthorized_admin)
+def get_blocked_urls():
+    """
+        Gets users 
+    """
+    
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    blocked_links = client.get_blocked_links()
+    for i in blocked_links:
+      print (i)
+
+    return jsonify(blocked_links) #returning error
+
 @app.route("/api/users", methods=["GET"])
 @login_required
 @admin_required(unauthorized_admin)
@@ -711,3 +730,101 @@ def get_users():
 
     users = client.get_users()[0]
     return jsonify(users)
+
+
+@app.route("/api/urls", methods=["GET"])
+@login_required
+@admin_required(unauthorized_admin)
+def get_all_urls():
+    """
+        Gets all URLS
+    """
+    
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    
+    urls = client.get_all_urls().get_results()
+    return jsonify(urls[0])
+
+
+# =============== Power Users ===================
+@app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<URL[&alias=<ALIAS>]", methods=["POST"])
+@login_required
+def get_user_url(NETID, TITLE, URL, ALIAS):
+    if current_user.type != 10:
+        return render_template("/error.html")
+    if NETID != current_user.netid:
+        return render_template("/error.html")
+        
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    response = client.create_short_url(long_url=LONG_URL, short_url=ALIAS, netid=current_user.netid, title=TITLE)
+    if response == '':
+        return render_template("/error.html")
+      
+    return response 
+
+
+    #return jsonify(urls)
+# =============== Regular Users ===================
+#View user's own urls
+@app.route("/api/users/<NETID>/urls", methods=["GET"])
+@login_required
+def get_user_url(NETID):
+    """
+        Gets all URLS from a specific user
+    """
+    if NETID != current_user.netid:
+        return render_template("/error.html")
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    
+    domain_info = client.get_urls(NETID).get_results()
+    return jsonify(domain_info[0])
+  
+##########HOW TO CONFIGURE FOR POST?
+#Create a new URL (no alias)
+@app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<LONG_URL>", methods=["POST"])
+@login_required
+def create_url(NETID, TITLE, LONG_URL):
+    #If the user creating the link is not the current user
+    if NETID != current_user.netid:
+        return render_template("/error.html")
+
+    # Validate the form
+    form.long_url.data = ensure_protocol(form.long_url.data)
+
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    response = client.create_short_url(long_url=LONG_URL, netid=current_user.netid, title=TITLE)
+    if response == '':
+        return render_template("/error.html")
+    return response
+    #If short url results in an error
+
+
+#View the stats for a user's own links
+@app.route("/api/urls/<LINKID>/stats", methods=["GET"])
+@login_required
+def view_stats(LINKID): #LINKID = shorturl
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    url_info = client.get_url_info(LINKID)
+    
+    return jsonify(url_info)
+
