@@ -695,24 +695,121 @@ def admin_unban_user():
 
 # Defining JSON API Routes Here
 
+"""
+    Add (POST)/Remove (DELETE) a blocked URL
+
+    @params
+        URL to block
+    @return
+        Object that contains the status of operation
+"""
+
+@app.route("/api/block_urls?url=<URL>", methods=["POST, DELETE"])
+@login_required
+@admin_required(unauthorized_admin)
+def change_blocked_URL(URL):
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    if request.method == "POST":
+        return client.block_link(URL, current_user.netid)
+
+    if request.method == "DELETE":
+        return client.allow_link(URL)
+
+    return render_template("/error.html")
+
+"""
+    Gets all blocked URLs
+    
+    @return
+      A list of dicts containing information about each blocked link
+"""
+
 @app.route("/api/blocked_urls", methods=["GET"])
 @login_required
 @admin_required(unauthorized_admin)
 def get_blocked_urls():
-    """
-        Gets users 
-    """
-    
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
             current_user.netid))
         return render_template("/error.html")
     blocked_links = client.get_blocked_links()
-    for i in blocked_links:
-      print (i)
+    blocked_JSON = jsonify(items=blocked_links)
 
-    return jsonify(blocked_links) #returning error
+    return blocked_JSON #returning non-serializable error 
+
+"""
+    Change the permissions of a user (aka change their user type to 0 (regular user), 10 (power user), or 20 (admin).
+
+    @param
+        NETID - NetID of the user to be changed
+        INT   - type number to change to
+
+    @return
+        A document containing:
+          - A boolean acknowledged as true if the operation ran with write concern or false if write concern was disabled
+          - matchedCount containing the number of matched documents
+          - modifiedCount containing the number of modified documents
+          - upsertedId containing the _id for the upserted document
+"""
+
+@app.route("/api/users/<NETID>?type=<INT>", methods=["PUT"])
+@login_required
+@admin_required(unauthorized_admin)
+def change_user_permissions(NETID, INT):
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+
+    response = client.edit_user_type(NETID, INT)
+    return response
+
+"""
+    Add/Remove users from the blacklist
+
+    @param
+        NETID - NetID of user to ban
+        BOOL  - true or false to either ban or unban user
+
+    @return
+        True/False if unban
+        Object if ban
+
+    *** jl1806 will go through this method to make it return True/False consistently for the front end
+"""
+   
+@app.route("/api/users/<NETID>?is_blacklisted=<BOOL>", methods=["PUT"])
+@login_required
+@admin_required(unauthorized_admin)
+def change_blacklist(NETID, BOOL):
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    # if already blacklisted, but want to unban
+    if client.is_blacklisted(NETID) and BOOL.lower() == "false":
+        return client.unban_user(NETID)
+    #if not banned, but want to ban
+    if not client.is_blacklisted(NETID) and BOOL.lower() == "true":
+        return client.ban_user(NETID, current_user.netid)
+
+    return False
+      
+
+"""
+    Returns iinformation about all users
+  
+    @return
+        JSON formatted information with: type of user, NetID, last_modified_by, is_blacklisted
+"""
+
 
 @app.route("/api/users", methods=["GET"])
 @login_required
@@ -728,8 +825,19 @@ def get_users():
             current_user.netid))
         return render_template("/error.html")
 
-    users = client.get_users()[0]
-    return jsonify(users)
+    users = client.get_users()
+    for i in users:
+        print (i)
+    users_JSON = jsonify(items=users)
+    return users_JSON #returning non-serializable error
+
+
+"""
+    Get all URLs that currently exist
+
+    @return
+        JSON formatted information with: id, long_url, netid, timeCreated, title, visits
+"""
 
 
 @app.route("/api/urls", methods=["GET"])
@@ -747,18 +855,28 @@ def get_all_urls():
         return render_template("/error.html")
     
     urls = client.get_all_urls().get_results()
-    return jsonify(urls[0])
-
+    urls_JSON = jsonify(items=urls)
+    #urls_JSON = jsonify(items=[i for i in urls])
+    return urls_JSON
 
 # =============== Power Users ===================
-@app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<URL[&alias=<ALIAS>]", methods=["POST"])
-@login_required
-def get_user_url(NETID, TITLE, URL, ALIAS):
-    if current_user.type != 10:
-        return render_template("/error.html")
-    if NETID != current_user.netid:
-        return render_template("/error.html")
-        
+
+"""
+  POST method to create a URL with an alias as a power user.
+
+  @params: - NETID > user's netID
+           - TITLE > What the user wants the title of the URL to be
+           - URL   > Name of the URL to be shortener
+           - ALIAS > custom short URL name
+  @return: Short URL if it succeeds
+"""
+@app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<URL>&alias=<ALIAS>", methods=["POST"])
+#@login_required
+def create_alias_url(NETID, TITLE, URL, ALIAS):
+    #if current_user.type != 10:
+    #    return render_template("/error.html")
+    #if NETID != current_user.netid:
+    #    return render_template("/error.html")
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
@@ -771,9 +889,15 @@ def get_user_url(NETID, TITLE, URL, ALIAS):
     return response 
 
 
-    #return jsonify(urls)
 # =============== Regular Users ===================
 #View user's own urls
+"""
+  View all URLs of a specific user
+
+  @params: NETID > 1 specific user's netid
+
+  @returns: JSON formatted list of URLs that contains: - short_url, title, netid, time created, long_url
+"""
 @app.route("/api/users/<NETID>/urls", methods=["GET"])
 @login_required
 def get_user_url(NETID):
@@ -791,7 +915,6 @@ def get_user_url(NETID):
     domain_info = client.get_urls(NETID).get_results()
     return jsonify(domain_info[0])
   
-##########HOW TO CONFIGURE FOR POST?
 #Create a new URL (no alias)
 @app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<LONG_URL>", methods=["POST"])
 @login_required
@@ -808,11 +931,31 @@ def create_url(NETID, TITLE, LONG_URL):
         app.logger.critical("{}: database connection failure".format(
             current_user.netid))
         return render_template("/error.html")
-    response = client.create_short_url(long_url=LONG_URL, netid=current_user.netid, title=TITLE)
-    if response == '':
-        return render_template("/error.html")
-    return response
+    try:
+        response = client.create_short_url(long_url=LONG_URL, netid=current_user.netid, title=TITLE)
+        app.logger.info("{}: short_url add '{}'".
+                format(current_user.netid, response))
+        return response
+    except Exception as e:
+        app.logger.warning("{}: exception in add '{}'".format(
+            current_user.netid, str(e)))
+        return {'long_url' : [str(e)]}
     #If short url results in an error
+
+
+@app.route("/api/urls/<NETID>/<LINKID>", methods=["DELETE"])
+@login_required
+def delete_url(NETID, LINKID):
+    #If the user creating the link is not the current user
+    if NETID != current_user.netid:
+        return render_template("/error.html")
+    client = get_db_client(app, g)
+    if client is None:
+        app.logger.critical("{}: database connection failure".format(
+            current_user.netid))
+        return render_template("/error.html")
+    client.delete_url(LINKID)
+    return "deleted"
 
 
 #View the stats for a user's own links
