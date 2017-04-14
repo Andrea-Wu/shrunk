@@ -714,9 +714,13 @@ def change_blocked_URL(URL):
             current_user.netid))
         return render_template("/error.html")
     if request.method == "POST":
+        app.logger.info("{}: block url '{}'".format(
+            current_user.netid, URL))
         return client.block_link(URL, current_user.netid)
 
     if request.method == "DELETE":
+        app.logger.info("{}: unblock url '{}'".format(
+            current_user.netid, URL))
         return client.allow_link(URL)
 
     return render_template("/error.html")
@@ -768,6 +772,8 @@ def change_user_permissions(NETID, INT):
         return render_template("/error.html")
 
     response = client.edit_user_type(NETID, INT)
+    app.logger.info("{}: change user '{}'".format(
+        current_user.netid, INT))
     return response
 
 """
@@ -783,28 +789,38 @@ def change_user_permissions(NETID, INT):
 
     *** jl1806 will go through this method to make it return True/False consistently for the front end
 """
-   
-@app.route("/api/users/<NETID>?is_blacklisted=<BOOL>", methods=["PUT"])
+#@app.route("/api/users/<NETID>?is_blacklisted=<BOOL>", methods=["PUT"])
+@app.route("/api/users/<NETID>", methods=["PUT"])
 @login_required
 @admin_required(unauthorized_admin)
-def change_blacklist(NETID, BOOL):
+def change_blacklist(NETID):
+    args = request.args
+    BOOL = args['is_blacklisted']
+
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
             current_user.netid))
         return render_template("/error.html")
+
+    bl = client.is_blacklisted(NETID)
     # if already blacklisted, but want to unban
-    if client.is_blacklisted(NETID) and BOOL.lower() == "false":
+    if bl and not BOOL:
+        app.logger.info("{}: unban user '{}'".format(
+            "jl1806", NETID))
         return client.unban_user(NETID)
     #if not banned, but want to ban
-    if not client.is_blacklisted(NETID) and BOOL.lower() == "true":
-        return client.ban_user(NETID, current_user.netid)
+    if not bl and BOOL:
+        response = client.ban_user(NETID, "jl1806")
+        app.logger.info("{}: ban user '{}'".format(
+            "jl1806", response))
+        return client.ban_user(NETID, "jl1806")
 
     return False
       
 
 """
-    Returns iinformation about all users
+    Returns information about all users
   
     @return
         JSON formatted information with: type of user, NetID, last_modified_by, is_blacklisted
@@ -826,8 +842,6 @@ def get_users():
         return render_template("/error.html")
 
     users = client.get_users()
-    for i in users:
-        print (i)
     users_JSON = jsonify(items=users)
     return users_JSON #returning non-serializable error
 
@@ -862,29 +876,53 @@ def get_all_urls():
 # =============== Power Users ===================
 
 """
-  POST method to create a URL with an alias as a power user.
+  POST method to create a URL with random short_url OR an alias if admin/power user.
 
   @params: - NETID > user's netID
            - TITLE > What the user wants the title of the URL to be
            - URL   > Name of the URL to be shortener
            - ALIAS > custom short URL name
   @return: Short URL if it succeeds
+
+  @API format
+      /api/users/<NETID>/urls?title=<TITLE>&url=<URL>&alias=<ALIAS>
+
 """
-@app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<URL>&alias=<ALIAS>", methods=["POST"])
-#@login_required
-def create_alias_url(NETID, TITLE, URL, ALIAS):
-    #if current_user.type != 10:
-    #    return render_template("/error.html")
-    #if NETID != current_user.netid:
-    #    return render_template("/error.html")
+@app.route("/api/users/<NETID>/urls", methods=["POST"])
+@login_required
+def create_alias_url(NETID):
+    if NETID != current_user.netid:
+        return render_template("/error.html")
+
+    args = request.args
+    TITLE = args['title']
+    LONG_URL = args['url']
+
+    #check if alias exists
+    ALIAS = False
+    for i in args:
+        if i == "alias":
+          ALIAS = True
+    
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
-            current_user.netid))
+            NETID))
         return render_template("/error.html")
-    response = client.create_short_url(long_url=LONG_URL, short_url=ALIAS, netid=current_user.netid, title=TITLE)
-    if response == '':
-        return render_template("/error.html")
+
+    #if power/admin + an alias exists
+    if ALIAS:
+        ALIAS = args['alias']
+        if current_user.type < 10:
+            return render_template("/error.html")
+        response = client.create_short_url(long_url=LONG_URL, short_url=ALIAS, netid=NETID, title=TITLE)
+        app.logger.info("{}: create alias url '{}'".format(
+            NETID, response))
+    else:
+        response = client.create_short_url(long_url=LONG_URL, netid=NETID, title=TITLE)
+        app.logger.info("{}: create non-alias url '{}'".format(
+            NETID, response))
+        
       
     return response 
 
@@ -896,7 +934,7 @@ def create_alias_url(NETID, TITLE, URL, ALIAS):
 
   @params: NETID > 1 specific user's netid
 
-  @returns: JSON formatted list of URLs that contains: - short_url, title, netid, time created, long_url
+  @returns: JSON formatted list of URLs that contains: - _id, long_url, netid, timeCreated, title, visits
 """
 @app.route("/api/users/<NETID>/urls", methods=["GET"])
 @login_required
@@ -912,9 +950,10 @@ def get_user_url(NETID):
             current_user.netid))
         return render_template("/error.html")
     
-    domain_info = client.get_urls(NETID).get_results()
-    return jsonify(domain_info[0])
-  
+    urls_info = client.get_urls(NETID).get_results()
+    urls_info_JSON = jsonify(items=urls_info)
+    return urls_info_JSON
+"""
 #Create a new URL (no alias)
 @app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<LONG_URL>", methods=["POST"])
 @login_required
@@ -941,6 +980,7 @@ def create_url(NETID, TITLE, LONG_URL):
             current_user.netid, str(e)))
         return {'long_url' : [str(e)]}
     #If short url results in an error
+"""
 
 
 @app.route("/api/urls/<NETID>/<LINKID>", methods=["DELETE"])
@@ -955,10 +995,20 @@ def delete_url(NETID, LINKID):
             current_user.netid))
         return render_template("/error.html")
     client.delete_url(LINKID)
+    app.logger.info("{}: delete short_url '{}'".format(
+        current_user.netid, LINKID))
     return "deleted"
 
 
-#View the stats for a user's own links
+"""
+    Returns stats about a certain short_url
+
+    @param
+        short_url name
+
+    @return
+        JSON item containing: _id, long_url, netid, timeCreated, title, visits
+"""
 @app.route("/api/urls/<LINKID>/stats", methods=["GET"])
 @login_required
 def view_stats(LINKID): #LINKID = shorturl
@@ -968,6 +1018,8 @@ def view_stats(LINKID): #LINKID = shorturl
             current_user.netid))
         return render_template("/error.html")
     url_info = client.get_url_info(LINKID)
+    app.logger.info("{}: get url info '{}'".format(
+        current_user.netid, url_info))
     
     return jsonify(url_info)
 
