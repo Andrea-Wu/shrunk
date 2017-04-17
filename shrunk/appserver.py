@@ -702,28 +702,40 @@ def admin_unban_user():
         URL to block
     @return
         Object that contains the status of operation
+    @route
+        /api/block_urls?url=<URL>
 """
 
-@app.route("/api/block_urls?url=<URL>", methods=["POST, DELETE"])
-#@login_required
-#@admin_required(unauthorized_admin)
-def change_blocked_URL(URL):
+@app.route("/api/block_urls", methods=["POST", "DELETE"])
+@login_required
+@admin_required(unauthorized_admin)
+def change_blocked_URL():
     args = request.args
-    BOOL = args['is_blacklisted']
+    URL = args['url']
+
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
             current_user.netid))
         return render_template("/error.html")
+
+    #Add to blocked_urls
     if request.method == "POST":
         app.logger.info("{}: block url '{}'".format(
             current_user.netid, URL))
-        return client.block_link(URL, current_user.netid)
+        client.block_link(URL, current_user.netid)
+        if client.is_blocked(URL):
+            return jsonify({})
+        return "Error" #link should be blocked, but it is not
 
+    #Remove from blocked_urls
     if request.method == "DELETE":
         app.logger.info("{}: unblock url '{}'".format(
             current_user.netid, URL))
-        return client.allow_link(URL)
+        client.allow_link(URL)
+        if not client.is_blocked(URL):
+            return jsonify({})
+        return "Error" #link should unblocked, but it is blocked
 
     return render_template("/error.html")
 
@@ -735,8 +747,8 @@ def change_blocked_URL(URL):
 """
 
 @app.route("/api/blocked_urls", methods=["GET"])
-#@login_required
-#@admin_required(unauthorized_admin)
+@login_required
+@admin_required(unauthorized_admin)
 def get_blocked_urls():
     client = get_db_client(app, g)
     if client is None:
@@ -762,27 +774,13 @@ def get_blocked_urls():
           - matchedCount containing the number of matched documents
           - modifiedCount containing the number of modified documents
           - upsertedId containing the _id for the upserted document
-"""
 
-@app.route("/api/users/<NETID>?type=<INT>", methods=["PUT"])
-@login_required
-@admin_required(unauthorized_admin)
-def change_user_permissions(NETID, INT):
-    client = get_db_client(app, g)
-    if client is None:
-        app.logger.critical("{}: database connection failure".format(
-            current_user.netid))
-        return render_template("/error.html")
+    @route
+        /api/users/<NETID>?type=<INT>
+-----------------------------------------------------------
+    Add/remove users to a blacklist
 
-    response = client.edit_user_type(NETID, INT)
-    app.logger.info("{}: change user '{}'".format(
-        current_user.netid, INT))
-    return response
-
-"""
-    Add/Remove users from the blacklist
-
-    @param
+    @params
         NETID - NetID of user to ban
         BOOL  - true or false to either ban or unban user
 
@@ -790,38 +788,57 @@ def change_user_permissions(NETID, INT):
         True/False if unban
         Object if ban
 
-    *** jl1806 will go through this method to make it return True/False consistently for the front end
+    @route
+        /api/users/<NETID>?is_blacklisted=<BOOL>
 """
-#@app.route("/api/users/<NETID>?is_blacklisted=<BOOL>", methods=["PUT"])
+
 @app.route("/api/users/<NETID>", methods=["PUT"])
-@login_required
-@admin_required(unauthorized_admin)
-def change_blacklist(NETID):
+#@login_required
+#@admin_required(unauthorized_admin)
+def change_user_flags(NETID):
+    #get api variables
     args = request.args
-    BOOL = args['is_blacklisted']
 
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
-            current_user.netid))
+            "jl1806"))
         return render_template("/error.html")
 
-    bl = client.is_blacklisted(NETID)
-    # if already blacklisted, but want to unban
-    if bl and not BOOL:
-        app.logger.info("{}: unban user '{}'".format(
-            "jl1806", NETID))
-        return jsonify(client.unban_user(NETID))
-        #return jsonify(empty dict) if true
-    #if not banned, but want to ban
-    if not bl and BOOL:
-        response = client.ban_user(NETID, "jl1806")
-        app.logger.info("{}: ban user '{}'".format(
-            "jl1806", response))
-        return jsonify(client.ban_user(NETID, "jl1806"))
+    print (args['is_blacklisted'])
+    #if want to request to change the type of the user
+    if args['type']:
+        INT = args['type']
+        #get attempt to edit
+        client.edit_user_type(NETID, INT)
 
-    return False
-      
+        #if edit processed in the database by comparing the actual data to the requested
+        if client.get_user_type(NETID) == int(INT):
+            app.logger.info("{}: change user type '{}'".format(
+                "jl1806", INT))
+            return jsonify({})
+
+    #### I HAVE NO IDEA WHY IT'S NOT ENTERING THIS IF-STATEMENT. WHAT---------------------
+    if args['is_blacklisted']:   #if want to add/remove user to blacklist
+        print ("poop")
+        BOOL = args['is_blacklisted']
+        #check if netid is already blacklisted
+        bl = client.is_blacklisted(NETID)
+
+        # if already blacklisted, but want to unban
+        if bl and BOOL.lower() == "false":
+            app.logger.info("{}: unban user '{}'".format(
+                "jl1806", NETID))
+            return jsonify(client.unban_user(NETID))
+            #return jsonify(empty dict) if true
+        #if not banned, but want to ban
+        if not bl and BOOL.lower() == "true":
+            response = client.ban_user(NETID, "jl1806")
+            app.logger.info("{}: ban user '{}'".format(
+                "jl1806", response))
+            return jsonify(client.ban_user(NETID, "jl1806"))
+        
+    return "error" #return an error because not a valid API
 
 """
     Returns information about all users
