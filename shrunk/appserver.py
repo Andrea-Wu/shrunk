@@ -705,9 +705,11 @@ def admin_unban_user():
 """
 
 @app.route("/api/block_urls?url=<URL>", methods=["POST, DELETE"])
-@login_required
-@admin_required(unauthorized_admin)
+#@login_required
+#@admin_required(unauthorized_admin)
 def change_blocked_URL(URL):
+    args = request.args
+    BOOL = args['is_blacklisted']
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
@@ -733,8 +735,8 @@ def change_blocked_URL(URL):
 """
 
 @app.route("/api/blocked_urls", methods=["GET"])
-@login_required
-@admin_required(unauthorized_admin)
+#@login_required
+#@admin_required(unauthorized_admin)
 def get_blocked_urls():
     client = get_db_client(app, g)
     if client is None:
@@ -742,9 +744,10 @@ def get_blocked_urls():
             current_user.netid))
         return render_template("/error.html")
     blocked_links = client.get_blocked_links()
-    blocked_JSON = jsonify(items=blocked_links)
+    for link in blocked_links:
+        link.pop('_id')
 
-    return blocked_JSON #returning non-serializable error 
+    return jsonify({'data': blocked_links})
 
 """
     Change the permissions of a user (aka change their user type to 0 (regular user), 10 (power user), or 20 (admin).
@@ -808,13 +811,14 @@ def change_blacklist(NETID):
     if bl and not BOOL:
         app.logger.info("{}: unban user '{}'".format(
             "jl1806", NETID))
-        return client.unban_user(NETID)
+        return jsonify(client.unban_user(NETID))
+        #return jsonify(empty dict) if true
     #if not banned, but want to ban
     if not bl and BOOL:
         response = client.ban_user(NETID, "jl1806")
         app.logger.info("{}: ban user '{}'".format(
             "jl1806", response))
-        return client.ban_user(NETID, "jl1806")
+        return jsonify(client.ban_user(NETID, "jl1806"))
 
     return False
       
@@ -904,8 +908,8 @@ def create_alias_url(NETID):
     ALIAS = False
     for i in args:
         if i == "alias":
-          ALIAS = True
-    
+            ALIAS = True
+     
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
@@ -924,9 +928,11 @@ def create_alias_url(NETID):
         response = client.create_short_url(long_url=LONG_URL, netid=NETID, title=TITLE)
         app.logger.info("{}: create non-alias url '{}'".format(
             NETID, response))
-        
-      
-    return response 
+    
+    #Response var is the short_url name
+    if response is "":
+        return "error" ##error if response is a blank url => no short_url created
+    return jsonify({})  #returns empty dict if works
 
 
 # =============== Regular Users ===================
@@ -956,50 +962,38 @@ def get_user_url(NETID):
     urls_info_JSON = jsonify(items=urls_info)
     return urls_info_JSON
 """
-#Create a new URL (no alias)
-@app.route("/api/users/<NETID>/urls?title=<TITLE>&url=<LONG_URL>", methods=["POST"])
-@login_required
-def create_url(NETID, TITLE, LONG_URL):
-    #If the user creating the link is not the current user
-    if NETID != current_user.netid:
-        return render_template("/error.html")
+    Deletes the desired short_url
 
-    # Validate the form
-    form.long_url.data = ensure_protocol(form.long_url.data)
+    @params
+        NETID
+        LINKID - short_url that is going to be deleted
 
-    client = get_db_client(app, g)
-    if client is None:
-        app.logger.critical("{}: database connection failure".format(
-            current_user.netid))
-        return render_template("/error.html")
-    try:
-        response = client.create_short_url(long_url=LONG_URL, netid=current_user.netid, title=TITLE)
-        app.logger.info("{}: short_url add '{}'".
-                format(current_user.netid, response))
-        return response
-    except Exception as e:
-        app.logger.warning("{}: exception in add '{}'".format(
-            current_user.netid, str(e)))
-        return {'long_url' : [str(e)]}
-    #If short url results in an error
+    @return
+        empty {} if works
+        error message if something went wrong
 """
 
-
-@app.route("/api/urls/<NETID>/<LINKID>", methods=["DELETE"])
+@app.route("/api/urls/<LINKID>", methods=["DELETE"])
 @login_required
-def delete_url(NETID, LINKID):
+def delete_url(LINKID):
     #If the user creating the link is not the current user
-    if NETID != current_user.netid:
+    response = search(LINKID, current_user.netid).get_results()
+    #@pv149 - look up in database for user with this linkID ^ miight help you
+    if response:
         return render_template("/error.html")
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
-            current_user.netid))
+            NETID))
         return render_template("/error.html")
-    client.delete_url(LINKID)
+    response = client.delete_url(LINKID)
+    if response['urlDataResponse']['n'] == 0:
+        app.logger.info("{}: no short_url found '{}'".format(
+            NETID, LINKID))
+        return "error" #gives error if the response is 0, which means nothing was deleted
     app.logger.info("{}: delete short_url '{}'".format(
-        current_user.netid, LINKID))
-    return "deleted"
+        NETID, LINKID))
+    return jsonify(response)
 
 
 """
