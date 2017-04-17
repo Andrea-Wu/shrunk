@@ -842,8 +842,10 @@ def get_users():
         return render_template("/error.html")
 
     users = client.get_users()
-    users_JSON = jsonify(items=users)
-    return users_JSON #returning non-serializable error
+    for user in users:
+        user.pop('_id')
+
+    return jsonify({'data': users})
 
 
 """
