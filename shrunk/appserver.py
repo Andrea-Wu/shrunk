@@ -793,52 +793,54 @@ def get_blocked_urls():
 """
 
 @app.route("/api/users/<NETID>", methods=["PUT"])
-#@login_required
-#@admin_required(unauthorized_admin)
+@login_required
+@admin_required(unauthorized_admin)
 def change_user_flags(NETID):
-    #get api variables
-    args = request.args
 
     client = get_db_client(app, g)
     if client is None:
         app.logger.critical("{}: database connection failure".format(
-            "jl1806"))
+            current_user.netid))
         return render_template("/error.html")
 
-    print (args['is_blacklisted'])
     #if want to request to change the type of the user
-    if args['type']:
-        INT = args['type']
-        #get attempt to edit
-        client.edit_user_type(NETID, INT)
+    INT = request.args.get('type', type=int)
+    if INT is not None:
+        #Check if type is correct
+        if INT == 0 or INT == 10 or INT == 20:
+            
+            client.edit_user_type(NETID, INT)
 
-        #if edit processed in the database by comparing the actual data to the requested
-        if client.get_user_type(NETID) == int(INT):
-            app.logger.info("{}: change user type '{}'".format(
-                "jl1806", INT))
-            return jsonify({})
+            #if edit processed in the database by comparing the actual data to the requested
+            if client.get_user_type(NETID) == INT:
+                app.logger.info("{}: change user type '{}'".format(
+                    current_user.netid, INT))
+                return jsonify({})
+        #else not proper type
+        return "error" #Incorrect type value
 
-    #### I HAVE NO IDEA WHY IT'S NOT ENTERING THIS IF-STATEMENT. WHAT---------------------
-    if args['is_blacklisted']:   #if want to add/remove user to blacklist
-        print ("poop")
-        BOOL = args['is_blacklisted']
+    BOOL = request.args.get('is_blacklisted') == 'True'
+    if BOOL is not None:   #if want to add/remove user to blacklist
         #check if netid is already blacklisted
         bl = client.is_blacklisted(NETID)
 
         # if already blacklisted, but want to unban
-        if bl and BOOL.lower() == "false":
+        if bl and not BOOL:
+            print ("bl and not BOOL")
             app.logger.info("{}: unban user '{}'".format(
-                "jl1806", NETID))
-            return jsonify(client.unban_user(NETID))
-            #return jsonify(empty dict) if true
+                current_user.netid, NETID))
+            if not client.unban_user(NETID):
+                return "error" #unban resulted in error
         #if not banned, but want to ban
-        if not bl and BOOL.lower() == "true":
-            response = client.ban_user(NETID, "jl1806")
+        if not bl and BOOL:
+            response = client.ban_user(NETID, current_user.netid)
             app.logger.info("{}: ban user '{}'".format(
-                "jl1806", response))
-            return jsonify(client.ban_user(NETID, "jl1806"))
+                current_user.netid, response))
+            if response['n'] != 1:
+                return "error ba" #not unbanned properly
+        return jsonify({})
         
-    return "error" #return an error because not a valid API
+    return "error er" #return an error because not a valid API
 
 """
     Returns information about all users
@@ -904,11 +906,11 @@ def get_all_urls():
   @params: - NETID > user's netID
            - TITLE > What the user wants the title of the URL to be
            - URL   > Name of the URL to be shortener
-           - ALIAS > custom short URL name
+           - ALIAS (optional) > custom short URL name
   @return: Short URL if it succeeds
 
   @API format
-      /api/users/<NETID>/urls?title=<TITLE>&url=<URL>&alias=<ALIAS>
+      /api/users/<NETID>/urls?title=<TITLE>&url=<URL>&[alias=<ALIAS>]
 
 """
 @app.route("/api/users/<NETID>/urls", methods=["POST"])
@@ -922,10 +924,9 @@ def create_alias_url(NETID):
     LONG_URL = args['url']
 
     #check if alias exists
-    ALIAS = False
-    for i in args:
-        if i == "alias":
-            ALIAS = True
+    ALIAS = request.args.get('alias')
+    if ALIAS is None:
+        ALIAS = ""
      
     client = get_db_client(app, g)
     if client is None:
@@ -934,8 +935,7 @@ def create_alias_url(NETID):
         return render_template("/error.html")
 
     #if power/admin + an alias exists
-    if ALIAS:
-        ALIAS = args['alias']
+    if ALIAS != "":
         if current_user.type < 10:
             return render_template("/error.html")
         response = client.create_short_url(long_url=LONG_URL, short_url=ALIAS, netid=NETID, title=TITLE)
