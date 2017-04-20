@@ -229,7 +229,7 @@ def render_index(**kwargs):
     resp.set_cookie("sortby", sortby)
     return resp
 
-
+#OLD API ROUTE THAT WILL NOT BE USED
 @app.route("/stats/<short_url_id>", methods=["GET"])
 @login_required
 def stats(short_url_id):
@@ -976,6 +976,10 @@ def get_user_url(NETID):
         return render_template("/error.html")
     
     urls_info = client.get_urls(NETID).get_results()
+
+    #Get QR code - to generate picture in front end add "data:image/png;base64,{{ link['qr_code'] }}" as an href
+    for urls in urls_info:
+        urls['qr_code'] = gen_qr(app, urls['_id'])
     urls_info_JSON = jsonify(items=urls_info)
     return urls_info_JSON
 """
@@ -1004,6 +1008,7 @@ def delete_url(LINKID):
             NETID))
         return render_template("/error.html")
     response = client.delete_url(LINKID)
+    #Check # of changed items in response
     if response['urlDataResponse']['n'] == 0:
         app.logger.info("{}: no short_url found '{}'".format(
             NETID, LINKID))
