@@ -5,7 +5,7 @@
             </div>
 
             <div id='subjumbo' class='container-fluid'>
-                <div class="topelement">
+                <div class="topelement textcenter">
                     <button id="primarybtn" class="btn primary">Shorten URL</button>
                 </div> 
                 <div class="row">
@@ -13,7 +13,7 @@
                         <form id="inputForm" name="FORM" novalidate>
                             <div class="formlable">Title</div>
                             <div id="titleinput" class="" style="padding-right:0;">
-                                <input id="idtitle" type="text" class="form-control" name="Title" ng-model="newrow.title" required="true" placeholder="Creat link title...">
+                                <input id="idtitle" type="text" class="form-control" name="Title" ng-model="newrow.title" ng-required="true" placeholder="Creat link title...">
                             </div>
 
                             <div class="formlable">URL</div>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="topelement">
+                <div class="topelement textcenter">
                     <ul id="pagination" uib-pagination total-items="results.length" ng-model="currentPage" items-per-page="pageSize" max-size="4" class="pagination" boundary-link-numbers="true" rotate="false" ng-show="results.length > 4"></ul>
                 </div>
             </div>

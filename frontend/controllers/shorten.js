@@ -2,32 +2,14 @@
 
 var myApp = angular.module("shrunkApp");
 
-    myApp.controller("shorten", ['$scope', '$rootScope', function ($scope, $rootScope) {
+    myApp.controller("shorten", ['$scope', '$rootScope', 'ToggleView', function ($scope, $rootScope, ToggleView) {
         var editInput = document.getElementById("editInput"),
             box1 = document.getElementById("box1"),
             box2 = document.getElementById("box2"),
             primarybtn = document.getElementById("primarybtn"),
             inputGroup = document.getElementById("inputGroup"),
             inputForm = document.getElementById("inputForm");
-
-        function toggleView(btn, content, content2, text1, text2) {
-            var maxH = "266px";
-            if (content.style.height == maxH) {
-                setTimeout(function () {
-                    content2.style.visibility = "collapse";
-                }, 200);
-                setTimeout(function () {
-                    content.style.height = "0px";
-                }, 200);
-                btn.innerText = text2;
-            } else {
-                content.style.height = maxH;
-                setTimeout(function () {
-                    content2.style.visibility = "visible";
-                }, 350);
-                btn.innerText = text1;
-            }
-        };
+        
         $scope.results = $rootScope.results;
 
         $scope.addRow = function () {
@@ -65,7 +47,7 @@ var myApp = angular.module("shrunkApp");
         };
 
         primarybtn.onclick = function () {
-            toggleView(primarybtn, inputGroup, inputForm, "Hide", "Shorten URL");
+            ToggleView.toggleButton(primarybtn, inputGroup, inputForm, "Hide", "Shorten URL", "270px");
         };
 }]);
 

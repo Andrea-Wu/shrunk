@@ -2,13 +2,12 @@
 
     var myApp = angular.module("shrunkApp");
 
-    myApp.service('orderObjectBy', function () {
+    myApp.service('OrderObjectBy', function () {
         var self = this;
         
         this.doFilter = function (input, attribute) {
    
             if (!angular.isObject(input)) return input;
-//            console.log(input);
 
             //            for (var objectKey in input) {
             //                array.push(input[objectKey]);
@@ -16,6 +15,10 @@
 
             input.sort(function (a, b) {
                 switch (attribute) {
+                    case '':
+                        a = Date.parse(a['dateViewed']);
+                        b = Date.parse(b['dateViewed']);
+                        return b - a;
                     case 'bounceRate':
                         a = parseFloat(a[attribute]);
                         b = parseFloat(b[attribute]);
@@ -38,7 +41,6 @@
                         return a - b;
                 }
             });
-//            console.log(input);
             return input;
          
         }

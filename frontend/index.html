@@ -6,24 +6,26 @@
     <meta name="viewport" content="initial-scale=1">
     <link rel="shortcut icon" href="assets/r.ico" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link href="css/index.css" rel="stylesheet" type="text/css" />
     <link href="css/sidebar.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="lib/angular.min.js"></script>
-    <script src="controller/app.js"></script>
     <script src="lib/angular-animate.min.js"></script>
-    <script src="lib/ui-bootstrap-custom-tpls-2.0.1.min.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
     <script src="lib/angular-route.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
     <script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script>
     <script src="lib/angular-chart.min.js"></script>
-    <script src="controller/GetData.js"></script>
-    <script src="controller/indexCtrl.js"></script>
-    <script src="controller/shorten.js"></script>
-    <script src="controller/statController.js"></script>
-    <script src="controller/SelectDate.js"></script>
-    <script src="controller/orderObjBy.js"></script>
+    <link href="css/index.css" rel="stylesheet" type="text/css" />
+    <script src="controllers/app.js"></script>
+    <script src="services/GetData.js"></script>
+    <script src="services/OrderObjBy.js"></script>
+    <script src="services/SelectDate.js"></script>
+    <script src="services/ToggleView.js"></script>
+    <script src="services/Visualize.js"></script>    
+    <script src="controllers/indexCtrl.js"></script>
+    <script src="controllers/shorten.js"></script>
+    <script src="controllers/statController.js"></script>
 
 </head>
 
@@ -64,7 +66,7 @@
                         </li>  <!--add a modal  what an admin user can do-->
                         <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>        
                     </ul>
-                    <div id="searchframe"><input id="searchIn" class="form-control input-sm" type="text" ng-model="searchText" placeholder="Search created links ..." ng-keydown="checkKeyDown($event)" ng-keyup="checkKeyUp($event)" ng-change="search()"></div>
+                    <div id="searchframe"><input id="searchIn" class="form-control input-sm" type="text" ng-model="searchText" placeholder="Search Your URLs ..." ng-keydown="checkKeyDown($event)" ng-keyup="checkKeyUp($event)" ng-change="search()"></div>
                     <ul class="suggestions-list">
                         <li ng-repeat="suggestion in suggestions track by $index" ng-class="{active : selectedIndex === $index}" ng-click="AssignValueAndHide($index)">{{suggestion}}</li>
                     </ul>

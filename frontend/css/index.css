@@ -45,7 +45,8 @@ padding-top:0;
 .breadcrumb{margin-bottom: 0;}
 
 .btn:hover{
-top:0.5px; left:1px; border: 0px;
+top:0.5px; left:1px; 
+border: 0px;
 -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
 -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
 box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);    
@@ -152,9 +153,8 @@ overflow-y:auto;
 #scrollbox { overflow: -moz-scrollbars-none; }
 */
 
-#inputGroup {
+#inputGroup, #visualGroup {
 height: 0; margin-bottom:0; margin-top: 0; background: rgba(255,255,255,0.4); border-radius: 4px; transition: 0.4s cubic-bezier(1, .01, .27, 1.01);
-/*display: none;   */
 }
 
 /* ----------- */
@@ -230,7 +230,7 @@ background-position: right;
 background-size: 8%;    
 }
 
-.btn-secondary, .primary, #primarybtn{
+.btn-secondary, .primary{
 background:rgba(255,255,255,0.1); border-style: inset; border:1px solid white; border-radius:4px; color: white; margin-top:5px;  
 }
 
@@ -238,7 +238,7 @@ background:rgba(255,255,255,0.1); border-style: inset; border:1px solid white; b
 background: aqua; border:0; color:black;    
 }
 
-#primarybtn:hover, .blue:hover, .btn-secondary:hover, .primary:hover, #saveIcon.primary:hover{
+.blue:hover, .btn-secondary:hover, .primary:hover, #saveIcon.primary:hover{
 background: aqua; border:0; color:black;
 }
 
@@ -344,7 +344,11 @@ footer.container-fluid, footer.container-fluid > ul, footer.container-fluid > ul
 }
 
 .topelement {
-    text-align: center; clear:both; margin-top: 20px; margin-bottom: 20px; height: 40px;
+     clear:both; margin-top: 20px; margin-bottom: 20px; height: 40px;
+}
+
+.textcenter{
+    text-align: center;
 }
 
 .topline > .topelement:nth-child(1), .topline > .topelement:nth-child(2){
@@ -359,7 +363,7 @@ footer.container-fluid, footer.container-fluid > ul, footer.container-fluid > ul
     text-align: right; float: right; padding: 0; margin-top: 15px;
 }
 
-#inputForm {
+#inputForm, #visualForm {
 visibility:collapse; padding-top: 20px; padding-bottom: 20px;
 }
 
@@ -460,3 +464,19 @@ visibility:collapse; padding-top: 20px; padding-bottom: 20px;
 }
 
 .form-inline .form-control{margin-right: 5%;}
+
+label.btn-group {margin-top: 4px;}
+
+div.btn-group.dropup{height: 50px;}
+
+.btncenter{margin-left: calc((90%-92.6px)/2);}
+
+h4{font-weight: bold;}
+
+.blueclass{
+top:0.5px;    
+background: aqua; border:0; color:black;
+-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+-moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);        
+}
