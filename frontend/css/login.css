@@ -1,119 +1,143 @@
+.autopad{
+    padding: auto;
+}
+.automargin{
+    margin: auto;
+}
+
+nav {
+    margin-top: 20px;
+    padding-bottom: 2px;
+    background: rgba(255, 255, 255, 0);
+    border: 0;
+}
+
 #Urlshortener {
-color:rgb(204, 0, 51);
-font-weight: bold;
+    color: rgb(204, 0, 51);
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
 #Urlshortener:hover {
-cursor: default;	
+    cursor: default;
 }
 
-.navbar-header {
-padding-bottom: 2px;    
+#logobox {
+    padding-top: 0;
 }
 
 #rulogo {
-width:auto;
-height: 115%;
-margin-top:5%;
-position: relative;
+    width: auto;
+    height: 115%;
+    margin-top: 5%;
+    position: relative;
 }
 
 .jumbotron {
-height:auto;
-padding:10px;
-padding: 0;
-margin: 0;	
-width:100%;
-background:url('../assets/purebg.jpg') center;
--webkit-background-size: cover;
--moz-background-size: cover;
--o-background-size: cover;
-background-size: cover;
--webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
--moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
-border: 0px;
-}
-
-.container {
-border:0px;
-}
-
-#largebox{
-background:url('../assets/focus.png');
-background-size: contain;
--webkit-background-size: contain;
--moz-background-size: contain;
--o-background-size: contain;
-background-repeat: no-repeat;
-}
-
-#logobox{
-padding-top:0;
+    height: auto;
+    padding: auto;
+    margin: 0;
+    width: 100%;
+    min-height: 75vh;
+    background: url('../assets/purebg.jpg') center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    vertical-align: middle;
 }
 
 #rulogo {
-width:auto;
-height: 120%;
-margin-top:5%;
-margin-left:0;
-position: relative;
+    width: auto;
+    height: 120%;
+    margin-top: 5%;
+    margin-left: 0;
+    position: relative;
 }
 
-.col-sm-7{
-position: relative;
-border: 0px;	
+.col-sm-7 {
+    position: relative;
+    border: 0px;
 }
 
-.col-sm-5{
-position: relative;
-padding:10px;
-background: rgba(255,255,255,0.9);
-margin:0;
-border: 0px;
-}
-
-.row{
-height: 100%;
-width: 100%;
-position: relative;
-border: 0px;	
-}
-
-.breadcrumb, footer{ background: white; }
-
-.breadcrumb{margin-bottom: 0;}
-
-.btn{
-background: #E91E63;
-color: white;
-width: 100px;
+.btn {
+    background: #E91E63;
+    color: white;
+    width: 100px;
 }
 
 .btn:disabled:hover:not([enabled="enabled"]) {
-background: #E91E63;
-color: white;
+    background: #E91E63;
+    color: white;
 }
 
-.btn:hover{
-background: #eb3472;
-color: white;
-margin-top:2px;
--webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
--moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.45);
-border: 0px; 
+.btn:hover {
+    background: #eb3472;
+    color: white;
+    margin-top: 2px;
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    border: 0px;
 }
 
-#copyright{
-margin-bottom: 15px;	
+#copyright {
+    margin-bottom: 15px;
 }
 
-#formbox{
-width:80%;
-height:100%;
+.formbox {
+    width: 500px;
+    height: 100%;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 3px;
 }
 
-.feed{
+footer ul.breadcrumb {
+    background: rgba(255, 255, 255, 0);
+}
+
+#submitPrompt {display: none;}
+/*--for sign up page--*/
+
+#feedback-user, #feedback-repwd{
 color: #E91E63;	
+}
+
+form ul.helper-text {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 18px;
+  color: #808080;
+  display: none;
+}
+
+form ul.helper-text li{
+/*
+  margin: 0px;
+  padding: 0px;
+*/
+}
+
+form ul.helper-text li.valid {
+/*  color: #31B59B;*/
+}
+
+form.valid input {
+/*  border: 2px solid #1fd34a;*/
+}
+
+.valid {
+  color: #31B59B; 
+}
+
+.invalid {
+  color: #E91E63;	
 }
