@@ -2,7 +2,7 @@
 <html lang="en" ng-app="shrunkLogin" ng-cloak>
 
 <head>
-    <title>Login</title>
+    <title>Retrieve Password</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/r.ico" />
@@ -21,41 +21,37 @@
     <div id="header"></div>
     <div class="jumbotron">
         <div class="formbox automargin">
-            <h2>LOGIN</h2>
+            <h2>RETRIEVE PASSWORD</h2>
             <form action="/login" method="POST" name="userForm">
                 <div class="form-group">
-                    <label>Username:</label>
-                    <input type="text" class="form-control" id="nameLog" placeholder="Enter Username" autocomplete="off">
+                    <label>Enter Your RUID:</label>
+                    <input type="text" class="form-control" id="nameRetr" placeholder="Enter RUID" autocomplete="off">
                     <div id="namePrompt"></div>
                 </div>
                 <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" class="form-control" id="passwordLog" placeholder="Enter password" autocomplete="off">
-                    <div id="passPrompt"></div>
+                    <label>And Your RU Email:</label>
+                    <input type="email" class="form-control" id="emailRetr" placeholder="Enter Email" autocomplete="off">
+                    <div id="emailRetrPrompt"></div>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Remember me</label>
-                </div> 
-                <a type="submit" class="btn" id="loginBtn">Login</a> 
+                <a type="submit" class="btn" id="retrieveBtn">Send Email</a> 
                 <div id="submitPrompt"></div>
             </form>
-            <h6><a href='retrieve.html'>Forgot Password?</a></h6>
+        <h6><a href='login.html'>Login here</a></h6>     
         <h6><a href='signup.html'>New to Shrunk? Sign Up Here</a></h6>
         </div>
     </div>
     <div id="footer"></div>
     <script src="js/validation.js"></script>
     <script defer>
-        var valname = false, valpass = false;
-        getEl("nameLog").onkeyup = function () {
-            valname = validateName("nameLog", "namePrompt");
+        var valname = false, valemail = false;
+        getEl("nameRetr").onkeyup = function () {
+            valname = validateName("nameRetr", "namePrompt");
         }
-        getEl("passwordLog").onkeyup = function () {
-            valpass = validatePass("passwordLog", "passPrompt");
+        getEl("emailRetr").onkeyup = function () {
+            valemail = validateEmail("emailRetr", "emailRetrPrompt");
         }   
-        getEl("loginBtn").onclick = function () {
-            var evalSubmit = (valname && valpass);
+        getEl("retrieveBtn").onclick = function () {
+            var evalSubmit = (valname && valemail);
             submitValidation("submitPrompt", evalSubmit);
         }
     </script>

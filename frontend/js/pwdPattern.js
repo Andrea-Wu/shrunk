@@ -82,7 +82,7 @@ function ifValid() {
     }
 };
 
-var patternStatus = false;
+var patternStatus = false, valname = false;
 
 function validatePattern() {
     hint.style.display = "block";
@@ -121,28 +121,13 @@ repwd.onkeyup = function () {
         confirmPwd();
 }
 
-getEl("name").onkeyup = function(){
-    validateName("name");
+getEl("name").onkeyup = function () {
+    valname = validateName("name", "namePrompt");
 }
 
-getEl("signupBtn").onclick = function(){
-    if(!validateName("name") || !patternStatus || !confirmPwd()){
-        showEl("submitPrompt1");
-        prompt("All Fields Must be Valid to Submit", "submitPrompt1", invalid);
-        setTimeout(function () {
-            hideEl("submitPrompt1");
-        }, 1000);
-    }
-    else{
-        showEl("submitPrompt1");
-        prompt("Submitted", "submitPrompt1", valid);
-        getEl("name").value = "";
-        password.value = "";
-        repwd.value = "";
-        setTimeout(function () {
-            hideEl("submitPrompt1");
-        }, 1000);
-    }
+getEl("signupBtn").onclick = function () {
+    var evalSubmit = (valname && patternStatus && confirmPwd());
+    submitValidation("submitPrompt1", evalSubmit);
 }
 
 //})();

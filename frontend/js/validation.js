@@ -19,63 +19,64 @@ function prompt(message, location, color) {
 var invalid = "#E91E63";
 var valid = "#31B59B";
 
-function validateName(id) {
+function validateName(id, promptId) {
     var name = getEl(id).value;
-    showEl("namePrompt");
+    showEl(promptId);
     if (name.length === 0) {
-        prompt("Name is required", "namePrompt", invalid);
+        prompt("Name is required", promptId, invalid);
         return false;
     }
     else if (name.length !== 0 && !name.match(/^[A-Za-z0-9]{4,7}$/)) {
-        prompt("Invalid RUID", "namePrompt", invalid);
+        prompt("Invalid RUID", promptId, invalid);
         return false;
     }
     else {
-        hideEl("namePrompt");
+        hideEl(promptId);
         return true;
     }
 }
 
-function validatePass(id) {
-    showEl("passPrompt");
+function validatePass(id, promptId) {
+    showEl(promptId);
     var pass = getEl(id).value;
     if (pass.length === 0) {
-        prompt("Password required", "passPrompt", invalid);
+        prompt("Password required", promptId, invalid);
         return false;
     }
     else {
-        hideEl("passPrompt");
+        hideEl(promptId);
         return true;
     }
 }
 
-function submitValidation(id1, id2) {
-    if (!validateName(id1) || !validatePass(id2)) {
-        showEl("submitPrompt");
-        prompt("All Fields Must be Valid to Submit", "submitPrompt", invalid);
-        console.log("func1 called");
-        setTimeout(function () {
-            hideEl("submitPrompt");
-        }, 2000);
+function validateEmail(id, promptId){
+    showEl(promptId);
+    var email = getEl(id).value;
+    if(!email.match(/^\D[A-Za-z\.\_\-0-9]*[@][a-z]*[\.][a-z]{2,4}$/)){
+        prompt("Please enter valid email format", promptId, "red");
+        return false;
     }
-    else {
-        showEl("submitPrompt");
-        prompt("Submited", "submitPrompt", valid);
-        console.log("func2 called");
-        setTimeout(function () {
-            hideEl("submitPrompt");
-        }, 2000);
+    else{
+        hideEl(promptId);
+        return true;
     }
 }
 
-getEl("nameLog").onkeyup = function () {
-    validateName("nameLog");
-}
-getEl("passwordLog").onkeyup = function () {
-    validatePass("passwordLog");
-}
-getEl("loginBtn").onclick = function () {
-    submitValidation("nameLog", "passwordLog");
+function submitValidation(promptID, func) {
+    if (!func) {
+        showEl(promptID);
+        prompt("All Fields Must be Valid to Submit", promptID, invalid);
+        setTimeout(function () {
+            hideEl(promptID);
+        }, 2000);
+    }
+    else {
+        showEl(promptID);
+        prompt("Submited", promptID, valid);
+        setTimeout(function () {
+            hideEl(promptID);
+        }, 2000);
+    }
 }
 
 //})();

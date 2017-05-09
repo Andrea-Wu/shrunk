@@ -2,7 +2,8 @@
     padding: auto;
 }
 .automargin{
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 nav {
@@ -28,8 +29,8 @@ nav {
 
 #rulogo {
     width: auto;
-    height: 115%;
-    margin-top: 5%;
+    height: 120%;
+    margin-top: 4%;
     position: relative;
 }
 
@@ -39,6 +40,7 @@ nav {
     margin: 0;
     width: 100%;
     min-height: 75vh;
+    position: relative;
     background: url('../assets/purebg.jpg') center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -89,19 +91,26 @@ nav {
     margin-bottom: 15px;
 }
 
+/*place the form in the vertical and horizontal center*/
 .formbox {
     width: 500px;
-    height: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    left:50%;
+    margin-left: -250px;
     padding: 30px;
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 footer ul.breadcrumb {
     background: rgba(255, 255, 255, 0);
 }
 
-#submitPrompt {display: none;}
 /*--for sign up page--*/
 
 #feedback-user, #feedback-repwd{
@@ -119,23 +128,8 @@ form ul.helper-text {
   display: none;
 }
 
-form ul.helper-text li{
-/*
-  margin: 0px;
-  padding: 0px;
-*/
-}
-
-form ul.helper-text li.valid {
-/*  color: #31B59B;*/
-}
-
-form.valid input {
-/*  border: 2px solid #1fd34a;*/
-}
-
 .valid {
-  color: #31B59B; 
+  color:#25d1b2; 
 }
 
 .invalid {
