@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="shrunkApp" ng-cloak>
+<head>
+    <title>shrunk</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1">
+    <link rel="shortcut icon" href="assets/r.ico" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="css/sidebar.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="lib/angular.min.js"></script>
+    <script src="lib/angular-animate.min.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="lib/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
+    <script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script>
+    <script src="lib/angular-chart.min.js"></script>
+    <link href="css/index.css" rel="stylesheet" type="text/css" />
+    <script src="controllers/app.js"></script>
+    <script src="services/GetData.js"></script>
+    <script src="services/OrderObjBy.js"></script>
+    <script src="services/SelectDate.js"></script>
+    <script src="services/ToggleView.js"></script>
+    <script src="services/Visualize.js"></script>    
+    <script src="controllers/indexCtrl.js"></script>
+    <script src="controllers/shorten.js"></script>
+    <script src="controllers/statController.js"></script>
+
+</head>
+
+<body ng-controller="indexCtrl">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li>
+                <a class="logoholder" id='logobox'><img id='rulogo' src='assets/logored.png' /></a>
+            </li>
+            <li>
+                <a class="logoholder" href="">Administrator's Dashboard</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/blockurl"><img class="sideicon" src="assets/blockurl.png">  BLock URLs</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/"><img class="sideicon" src="assets/manageurl.png">  Manage All URLs</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/usermgmt"><img class="sideicon" src="assets/userroles.png">  Manage User Roles</a>
+            </li>
+            <li>
+                <a class="navlink" href="#/blacklist"><img class="sideicon" src="assets/blockuser.png">  Blacklist Users</a>
+            </li>
+        </ul>
+    </div>    
+    <div id="dialogoverlay" class="overlay"></div>
+    
+    <div id="shrunk">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid" style="padding-left:0;">
+                    <ul class="nav navbar-nav">
+                        <li><a id="openicon"><span class="glyphicon glyphicon-menu-hamburger"></span></a></li>
+                        <li><a id="urlshortener" href="#/"><span class="glyphicon glyphicon-home"></span> My URL Shortener</a></li>
+                        <li><a href="">NetID</a></li>
+                        <li><a href="">User Group: {{userGroup[0]}}</a>
+                        </li>  <!--add a modal  what an admin user can do-->
+                        <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>        
+                    </ul>
+                    <div id="searchframe"><input id="searchIn" class="form-control input-sm" type="text" ng-model="searchText" placeholder="Search Your URLs ..." ng-keydown="checkKeyDown($event)" ng-keyup="checkKeyUp($event)" ng-change="search()"></div>
+                    <ul class="suggestions-list">
+                        <li ng-repeat="suggestion in suggestions track by $index" ng-class="{active : selectedIndex === $index}" ng-click="AssignValueAndHide($index)">{{suggestion}}</li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main ng-view ></main>
+        <div class="pushSpace"></div>
+        <footer ng-include="'includes/footer.html'"></footer>
+    </div>
+</body>
+
+</html>

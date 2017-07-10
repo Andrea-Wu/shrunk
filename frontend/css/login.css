@@ -1,0 +1,137 @@
+.autopad{
+    padding: auto;
+}
+.automargin{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav {
+    margin-top: 20px;
+    padding-bottom: 2px;
+    background: rgba(255, 255, 255, 0);
+    border: 0;
+}
+
+#Urlshortener {
+    color: rgb(204, 0, 51);
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+#Urlshortener:hover {
+    cursor: default;
+}
+
+#logobox {
+    padding-top: 0;
+}
+
+#rulogo {
+    width: auto;
+    height: 120%;
+    margin-top: 4%;
+    position: relative;
+}
+
+.jumbotron {
+    height: auto;
+    padding: auto;
+    margin: 0;
+    width: 100%;
+    min-height: 75vh;
+    position: relative;
+    background: url('../assets/purebg.jpg') center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    vertical-align: middle;
+}
+
+#rulogo {
+    width: auto;
+    height: 120%;
+    margin-top: 5%;
+    margin-left: 0;
+    position: relative;
+}
+
+.col-sm-7 {
+    position: relative;
+    border: 0px;
+}
+
+.btn {
+    background: #E91E63;
+    color: white;
+    width: 100px;
+}
+
+.btn:disabled:hover:not([enabled="enabled"]) {
+    background: #E91E63;
+    color: white;
+}
+
+.btn:hover {
+    background: #eb3472;
+    color: white;
+    margin-top: 2px;
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.45);
+    border: 0px;
+}
+
+#copyright {
+    margin-bottom: 15px;
+}
+
+/*place the form in the vertical and horizontal center*/
+.formbox {
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    left:50%;
+    margin-left: -250px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+}
+
+footer ul.breadcrumb {
+    background: rgba(255, 255, 255, 0);
+}
+
+/*--for sign up page--*/
+
+#feedback-user, #feedback-repwd{
+color: #E91E63;	
+}
+
+form ul.helper-text {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 18px;
+  color: #808080;
+  display: none;
+}
+
+.valid {
+  color:#25d1b2; 
+}
+
+.invalid {
+  color: #E91E63;	
+}

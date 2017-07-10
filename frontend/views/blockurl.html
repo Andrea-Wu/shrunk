@@ -1,0 +1,23 @@
+<br><br><br><br>
+<div class="mainBox" ng-controller="blockurlFX">
+    <div class="title100">Add the link to disable shortening</div>
+    <div class="space20"></div>
+        <form class="mainbox0 center" name="Addblock" novalidate>    
+            <input type="text" class="form-control" name="addlist" ng-model="newurl.list" required="true" placeholder="add link here...">
+            <div class="space20"></div>
+            <button class="btn blue" ng-click="addUrl()" ng-disabled="Addblock.addlist.$touched && Addblock.addlist.$invalid">Block</button>
+            <div class="space20"></div>
+        </form>
+        <div class="mainbox0 center">
+            <div class="title100">Blocked URLs</div>
+            <div class="space20"></div>
+            <div style="text-align:left; margin-bottom:10px; width:100%;" ng-repeat="blocked in blockurls">
+                <div class="line topalign" style="width:14%; margin-right:0;">
+                    <a class="btn btn-xs primary" ng-click="removeUrl(blocked)" style="margin-top:0;">Unblock</a>
+                </div>   
+                <div class="line topalign wrap" style="width:85%;">{{blocked.list}}</div>
+                <div class="clear"></div>
+            </div>
+        </div>
+</div>
+<br><br><br><br>

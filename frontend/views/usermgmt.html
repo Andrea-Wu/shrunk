@@ -1,0 +1,25 @@
+<br><br><br><br>
+<div class="mainBox" ng-controller="usermgmtFX">
+    <div>Manage User Roles</div>
+    <div class="space20"></div>    
+        <form class="mainbox0 center" name="Addblock" novalidate>    
+            <input type="text" class="form-control" name="addlist" ng-model="searchUser" required="true" placeholder="search user by Net ID or full name...">
+            <div class="space20"></div>
+        </form>
+        <div>User Search Result</div>
+        <div class="mainbox0">
+            <div class="blockeduser" ng-repeat="User in allUsers | filter: searchUser">
+                <div class="line">{{User.netid}}</div>
+                <div class="menubox line" style="float: right;"><a id="showToggle" ng-click="clicked=!clicked"><span class="glyphicon glyphicon-option-horizontal"></span><span class="glyphicon glyphicon-option-horizontal"></span></a></div>
+                <div ng-show="clicked">
+                    <div class="clear"></div>
+                    <div class="line">{{User.fisrtname}}</div>
+                    <div class="line">{{User.lastname}}</div>
+                    <div class="clear"></div>
+                    <div>Assign this user as <select class="selections" ng-model="selectedUser"><option>Regular User</option><option>Power User</option><option>Administrator</option></select></div>
+                </div>    
+            </div>
+            <div class="space20"></div> 
+        </div>
+</div>
+<br><br><br><br>

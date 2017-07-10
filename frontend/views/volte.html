@@ -1,0 +1,84 @@
+<br>
+<div class="mainBox" ng-controller="voLTE">
+    <div class="title100">Title Goes Here</div>
+    <br>
+    <div class="center">
+        <form class="form-inline">
+            <select class="form-control" ng-model="kpiNum">
+                <option selected value="">Sort By KPI</option>
+                <option value="-kpi1">KPI 1 - Highest</option>
+                <option value="-kpi2">KPI 2 - Highest</option>
+                <option value="-kpi3">KPI 3 - Highest</option>
+                <option value="-kpi4">KPI 4 - Highest</option>
+                <option value="-kpi5">KPI 5 - Highest</option>
+                <option value="-kpi6">KPI 6 - Highest</option>
+                <option value="-kpi7">KPI 7 - Highest</option>
+                <option value="-kpi8">KPI 8 - Highest</option>
+                <option value="+kpi1">KPI 1 - Lowest</option>
+                <option value="+kpi2">KPI 2 - Lowest</option>
+                <option value="+kpi3">KPI 3 - Lowest</option>
+                <option value="+kpi4">KPI 4 - Lowest</option>
+                <option value="+kpi5">KPI 5 - Lowest</option>
+                <option value="+kpi6">KPI 6 - Lowest</option>
+                <option value="+kpi7">KPI 7 - Lowest</option>
+                <option value="+kpi8">KPI 8 - Lowest</option>
+            </select>
+            <label class="mr-sm-2">Start:</label>
+            <input type="date" class="form-control" ng-model="dateStart" />
+            <label class="mr-sm-2">End:</label>
+            <input type="date" class="form-control" ng-model="dateEnd" />
+            <input type="button" class="btn btn-sm primary" ng-click="newDataset()" style="margin-top:0; height:32px;" value="Genderate Table" /> </form>
+    </div>
+    <br>
+    <div style="width:40%; margin-left:30%;">Start Date: {{dateStart | date}}</div>
+    <div style="width:40%; margin-left:30%;">End Date: {{dateEnd | date}}</div>
+    <div style="width:40%; margin-left:30%;">Number of Observations Selected: {{filteredData.length}}</div>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> Date </th>
+                <th> KPI 1 </th>
+                <th> KPI 2 </th>
+                <th> KPI 3 </th>
+                <th> KPI 4 </th>
+                <th> KPI 5 </th>
+                <th> KPI 6 </th>
+                <th> KPI 7 </th>
+                <th> KPI 8 </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in newData | beginWith:(currentPage - 1) * pageSize | limitTo:pageSize | orderBy: kpiNum |filter:searchText" ng-click="openModal($index)" ng-mouseover="showHint($index)">
+                <td> {{row.date}} </td>
+                <td> {{row.kpi1}} </td>
+                <td> {{row.kpi2}} </td>
+                <td> {{row.kpi3}} </td>
+                <td> {{row.kpi4}} </td>
+                <td> {{row.kpi5}} </td>
+                <td> {{row.kpi6}} </td>
+                <td> {{row.kpi7}} </td>
+                <td> {{row.kpi8}} </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="topelement">
+        <ul id="pagination" uib-pagination total-items="newData.length" ng-model="currentPage" items-per-page="pageSize" max-size="5" class="pagination" boundary-link-numbers="true" rotate="false" ng-show="newData.length > 10"></ul>
+    </div>
+    <div id="modalChart">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="closeModal()" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{{selectedRow.date | date: "fullDate"}}</h4> </div>
+                <div class="modal-body">
+                    <canvas id="modalbar" class="chart chart-bar" chart-data="modaldata" chart-labels="modallabels" chart-series="modalseries" chart-colors="colors" chart-options="modaloptions"> </canvas>
+                </div>
+                <div class="modal-footer"> </div>
+            </div>
+    </div>
+    <div id="overlayVo" class="overlay"></div>
+</div>
+<br>
+<br>
+<br>
+<br>
