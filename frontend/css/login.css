@@ -13,6 +13,10 @@ nav {
     border: 0;
 }
 
+.nav>li>a:hover, nav>li>a:focus {
+    background-color: white;
+}
+
 #Urlshortener {
     color: rgb(204, 0, 51);
     font-weight: bold;

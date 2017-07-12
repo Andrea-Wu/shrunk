@@ -28,6 +28,13 @@ var myApp = angular.module("shrunkApp");
                return response.data;
             });
             return promise4;
+        }        
+        
+        self.getAgentJson = function () {
+            var promise5 = $http.get('../data/agent.json').then(function (response) {
+               return response.data;
+            });
+            return promise5;
         }
     });
 })();

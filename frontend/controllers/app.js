@@ -1,34 +1,34 @@
 (function () {
     "use strict";
-    var myApp = angular.module("shrunkApp", ['ngAnimate', 'ui.bootstrap', 'ngRoute', 'chart.js', 'angularModalService']);
+    var myApp = angular.module("shrunkApp", ['ngAnimate', 'ui.bootstrap', 'ngRoute', 'chart.js']);
     myApp.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'views/home.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).when('/', {
             templateUrl: 'views/home.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).when('/imei', {
             templateUrl: 'views/imei.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).when('/volte', {
             templateUrl: 'views/volte.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).when('/stat/:id', {
             templateUrl: 'views/stats.html'
             , controller: 'statController'
         }).when('/blockurl', {
             templateUrl: 'views/blockurl.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).when('/usermgmt', {
             templateUrl: 'views/usermgmt.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).when('/blacklist', {
             templateUrl: 'views/blacklist.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         }).otherwise({
             redirectTo: 'views/home.html'
-            , controller: 'indexCtrl'
+            , controller: 'indexController'
         });
 }]);
     myApp.filter('beginWith', function () {

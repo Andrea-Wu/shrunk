@@ -87,13 +87,14 @@
              <div class="textcenter"><b>{{series[0]}}</b></div>
         </div>    
 -->
+    
         <div ng-show="lineClicked">
             <br/>
-            <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options" chart-colors="colors" chart-click="onClick"> </canvas>
+            <canvas id="line" class="chart chart-line" chart-data="chartSeries.data" chart-labels="chartSeries.labels" chart-series="series" chart-options="options" chart-colors="colors" chart-click="onClick"> </canvas>
         </div>
         <div ng-show="barClicked">
             <br/>
-            <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options" chart-colors="colors" chart-click="onClick"> </canvas>
+            <canvas id="bar" class="chart chart-bar" chart-data="chartSeries.data" chart-labels="chartSeries.labels" chart-series="series" chart-options="options" chart-colors="colors" chart-click="onClick"> </canvas>
         </div>
     </div>
 </div>
