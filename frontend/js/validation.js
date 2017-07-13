@@ -1,4 +1,20 @@
-//(function(){
+"use strict";
+
+// This body of code stores the validator functions, and 
+//  sanitizes the format of the input
+
+// Colors used to color text in prompts that tell user whether
+//  the input is valid or not
+var invalid = "#E91E63";
+var valid = "#31B59B";
+var ruidLength = 9;
+
+// The following are functions used to alias common operations,
+//  like getting a DOM object, showing and hiding the object
+//  (which in this case is a prompt that appears when the input
+//  format in a given form is incorrect, and disappears when
+//  correct)
+
 function getEl(id) {
     return document.getElementById(id);
 }
@@ -16,17 +32,33 @@ function prompt(message, location, color) {
     getEl(location).style.color = color;
 }
 
-var invalid = "#E91E63";
-var valid = "#31B59B";
-
+// Checks whether the format of the username specified is correct
 function validateName(id, promptId) {
     var name = getEl(id).value;
     showEl(promptId);
     if (name.length === 0) {
-        prompt("Name is required", promptId, invalid);
+        prompt("Username is required", promptId, invalid);
         return false;
     }
-    else if (name.length !== 0 && !name.match(/^[A-Za-z0-9]{4,7}$/)) {
+    else if (name.length !== ruidLength && !name.match(/^[A-Za-z0-9]{4,7}$/)) {
+        prompt("Invalid username", promptId, invalid);
+        return false;
+    }
+    else {
+        hideEl(promptId);
+        return true;
+    }
+}
+
+// Checks whether the format of the RUID specified is correct
+function validateRUID(id, promptId) {
+    var ruid = getEl(id).value;
+    showEl(promptId);
+    if (ruid.length === 0) {
+        prompt("RUID is required", promptId, invalid);
+        return false;
+    }
+    else if (ruid.length !== 9 || !ruid.match(/[0-9]{9}/)) {
         prompt("Invalid RUID", promptId, invalid);
         return false;
     }
@@ -36,6 +68,7 @@ function validateName(id, promptId) {
     }
 }
 
+// Checks whether the format of the password specified is correct
 function validatePass(id, promptId) {
     showEl(promptId);
     var pass = getEl(id).value;
@@ -49,11 +82,12 @@ function validatePass(id, promptId) {
     }
 }
 
+// Checks whether the format of the email specified is correct
 function validateEmail(id, promptId){
     showEl(promptId);
     var email = getEl(id).value;
     if(!email.match(/^\D[A-Za-z\.\_\-0-9]*[@][a-z]*[\.][a-z]{2,4}$/)){
-        prompt("Please enter valid email format", promptId, "red");
+        prompt("Please enter a valid email", promptId, invalid);
         return false;
     }
     else{
@@ -62,8 +96,14 @@ function validateEmail(id, promptId){
     }
 }
 
-function submitValidation(promptID, func) {
-    if (!func) {
+// Checks if the input specified is of the correct form.
+//  TODO: This part is going to interact with the backend
+//      (e.g. validate account retrieve information, etc...)
+//  I (Ming) think it's missing another field which specified
+//      the action that should occur, since this function
+//      is used for multiple purposes
+function submitValidation(promptID, is_valid_input) {
+    if (!is_valid_input) {
         showEl(promptID);
         prompt("All Fields Must be Valid to Submit", promptID, invalid);
         setTimeout(function () {
@@ -72,11 +112,9 @@ function submitValidation(promptID, func) {
     }
     else {
         showEl(promptID);
-        prompt("Submited", promptID, valid);
+        prompt("Submitted", promptID, valid);
         setTimeout(function () {
             hideEl(promptID);
         }, 2000);
     }
 }
-
-//})();

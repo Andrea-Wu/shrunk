@@ -46,19 +46,28 @@
     </div>
     <div id="footer"></div>
     <script src="js/validation.js"></script>
-    <script defer>
-        var valname = false, valpass = false;
-        getEl("nameLog").onkeyup = function () {
-            valname = validateName("nameLog", "namePrompt");
-        }
-        getEl("passwordLog").onkeyup = function () {
-            valpass = validatePass("passwordLog", "passPrompt");
-        }   
-        getEl("loginBtn").onclick = function () {
-            var evalSubmit = (valname && valpass);
+    <script>
+        // Booleans used to check if username and password are of the
+        //  of the correct format.
+        var username = false, password = false;
+
+        // Validates the input format of the name when it is entered
+        $("#nameLog").keyup( function () {
+            username = validateName("nameLog", "namePrompt");
+        });
+
+        // Validates the input format of the password when the password
+        $("#passwordLog").keyup( function () {
+            password = validatePass("passwordLog", "passPrompt");
+        });
+
+        // Checks if format of inputs are valid
+        $("#loginBtn").click( function () {
+            var evalSubmit = (username && password);
             submitValidation("submitPrompt", evalSubmit);
-        }
+        });
     </script>
+
 </body>
 
 </html>
