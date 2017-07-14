@@ -118,3 +118,72 @@ function submitValidation(promptID, is_valid_input) {
         }, 2000);
     }
 }
+
+///////////////////////////
+var form_text = {
+    charLength: document.querySelector('.helper-text .length'),
+    lowercase: document.querySelector('.helper-text .lowercase'),
+    uppercase: document.querySelector('.helper-text .uppercase'),
+    special: document.querySelector('.helper-text .special')
+};
+
+// Collection of password text
+var pass_tests = {
+    charLength: function (pwd) {
+        if (pwd.value.length >= 8) {
+            return true;
+        }
+    },
+    lowercase: function (pwd) {
+        var regex = /^(?=.*[a-z]).+$/; // Lowercase character pattern
+        if (regex.test(pwd.value)) {
+            return true;
+        }
+    },
+    uppercase: function (pwd) {
+        var regex = /^(?=.*[A-Z]).+$/; // Uppercase character pattern
+        if (regex.test(pwd.value)) {
+            return true;
+        }
+    },
+    special: function (pwd) {
+        var regex = /^(?=.*[0-9_\W]).+$/; // Special character or number pattern
+        if (regex.test(pwd.value)) {
+            return true;
+        }
+    }
+};
+
+function validatePattern() {
+    hint.style.display = "block";
+
+    var pwd = getEl("password");
+    var length = pass_tests.charLength(pwd);
+    var lower = pass_tests.lowercase(pwd);
+    var upper = pass_tests.uppercase(pwd);
+    var special = pass_tests.special(pwd);
+
+    if (length && lower && upper && special) {
+        setTimeout(function () {
+            hint.style.display = "none";
+        }, 1000);
+        return true;
+    }
+    else{
+        return false;
+    }
+};
+
+function confirmPwd() {
+    var password = getEl("password");
+    var repwd = getEl("repeatpwd");
+    if (password.value !== repwd.value) {
+        showEl("repwdPrompt");
+        prompt("Password do not match", "repwdPrompt", invalid);
+        return false;
+    }
+    else {
+        hideEl("repwdPrompt");
+        return true;
+    }
+};
