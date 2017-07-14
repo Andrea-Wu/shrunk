@@ -120,49 +120,48 @@ function submitValidation(promptID, is_valid_input) {
 }
 
 ///////////////////////////
-var form_text = {
-    charLength: document.querySelector('.helper-text .length'),
-    lowercase: document.querySelector('.helper-text .lowercase'),
-    uppercase: document.querySelector('.helper-text .uppercase'),
-    special: document.querySelector('.helper-text .special')
-};
 
-// Collection of password text
+// Collection of tests the password needs to satisfy
 var pass_tests = {
     charLength: function (pwd) {
-        if (pwd.value.length >= 8) {
+        if (pwd.value.length >= 8) {    // At least 8 characters
             return true;
         }
     },
     lowercase: function (pwd) {
-        var regex = /^(?=.*[a-z]).+$/; // Lowercase character pattern
+        var regex = /^(?=.*[a-z]).+$/; // Contains a lowercase character
         if (regex.test(pwd.value)) {
             return true;
         }
     },
     uppercase: function (pwd) {
-        var regex = /^(?=.*[A-Z]).+$/; // Uppercase character pattern
+        var regex = /^(?=.*[A-Z]).+$/; // Contains an uppercase character
         if (regex.test(pwd.value)) {
             return true;
         }
     },
     special: function (pwd) {
-        var regex = /^(?=.*[0-9_\W]).+$/; // Special character or number pattern
+        var regex = /^(?=.*[0-9_\W]).+$/; // Contains a special character or number
         if (regex.test(pwd.value)) {
             return true;
         }
     }
 };
 
+// Validates password pattern
 function validatePattern() {
+    // Used to provide hint, guideline to creating password
     hint.style.display = "block";
 
+    // Get password and test the given password
     var pwd = getEl("password");
     var length = pass_tests.charLength(pwd);
     var lower = pass_tests.lowercase(pwd);
     var upper = pass_tests.uppercase(pwd);
     var special = pass_tests.special(pwd);
 
+    // Displays messages when the input format of password
+    //  is in correct
     if (length && lower && upper && special) {
         setTimeout(function () {
             hint.style.display = "none";
@@ -174,6 +173,7 @@ function validatePattern() {
     }
 };
 
+// Checks if input for password and confirm-password forms are equal
 function confirmPwd() {
     var password = getEl("password");
     var repwd = getEl("repeatpwd");
