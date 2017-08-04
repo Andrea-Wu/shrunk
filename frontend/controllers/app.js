@@ -1,6 +1,7 @@
 (function () {
     "use strict";
     var myApp = angular.module("shrunkApp", ['ngAnimate', 'ui.bootstrap', 'ngRoute', 'chart.js']);
+
     myApp.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'views/home.html'

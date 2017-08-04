@@ -109,13 +109,12 @@ function submitValidation(promptID, is_valid_input) {
         setTimeout(function () {
             hideEl(promptID);
         }, 2000);
+        return false;
     }
     else {
-        showEl(promptID);
-        prompt("Submitted", promptID, valid);
-        setTimeout(function () {
-            hideEl(promptID);
-        }, 2000);
+        // return true, so that wrapping function can perform
+        //  get the proper page
+        return true;
     }
 }
 

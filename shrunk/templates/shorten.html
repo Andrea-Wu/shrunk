@@ -1,0 +1,25 @@
+<html>
+
+<head>
+    <title>Shorten URL</title>
+</head>
+
+<body>
+    <h1>Shorten your URL here</h1>
+
+    <form action="" method="post">
+        <label>Title</label>
+        <input type="text" name="title" value="{{ request.form.title }}" required>
+
+        <label>URL</label>
+        <input type="text" name="url" value="{{ request.form.url }}" required>
+
+        <input type="submit" name="shrink" value="Shrink your URL">
+
+        {% if shortened_url %}
+            <p>Your shortened URL: {{ shortened_url }}</p>
+        {% endif %}
+    </form> 
+</body>
+
+</html>

@@ -45,7 +45,7 @@ nav {
     width: 100%;
     min-height: 75vh;
     position: relative;
-    background: url('../assets/purebg.jpg') center;
+    background: url('../img/purebg.jpg') center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

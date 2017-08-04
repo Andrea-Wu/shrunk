@@ -2,12 +2,30 @@
 
 Sets up a Flask application for the main web server.
 """
+import os
+import sys
+import json
+from pprint import pprint
+from time import sleep
+
 from flask import (Flask, render_template, make_response, request, redirect, 
                    g, jsonify, abort)
-from flask_login import LoginManager, login_required, current_user, logout_user
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from flask_auth import Auth
 from flask_restful import Resource, Api, reqparse
-from shrunk.linkserver import redirect_link
+
+# Create application
+global app
+tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+app = Flask(__name__, template_folder=tmpl_dir)
+print(app.template_folder)
+api = Api(app)
+
+app.config.from_pyfile("config.py", silent=True)
+#from pprint import pprint
+#pprint(app.config)
+
+#from shrunk.linkserver import redirect_link
 from shrunk.user import admin_required, elevated_required, User, get_user
 from shrunk.util import set_logger, formattime, gen_qr, db_to_response_dict
 from shrunk.forms import RULoginForm, UserForm
@@ -15,15 +33,8 @@ from shrunk.filters import strip_protocol, ensure_protocol
 import shrunk.client as client
 import shrunk.models as models
 from mongoengine import connect, DoesNotExist
-import json
-
-# Create application
-global app
-app = Flask(__name__)
-api = Api(app)
 
 # Import settings in config.py
-app.config.from_pyfile("config.py", silent=True)
 app.secret_key = app.config['SECRET_KEY']
 
 # Initialize logging
@@ -72,8 +83,13 @@ def login_success(user):
     :Parameters:
       - `user`: The user that has logged in.
     """
+    # Temporarily passing in the username directly, and bypassing
+    #   the database check and loading landing page directly
+    #app.logger.info("{}: login".format(user.netid))
+    #return redirect('/')
+    
     app.logger.info("{}: login".format(user.netid))
-    return redirect('/')
+    return render_template("index.html", netid=user.netid, privilege=user.type)
 
 
 def unauthorized_admin():
@@ -81,12 +97,12 @@ def unauthorized_admin():
 
 
 ### Views ###
-try:
-    if app.config["DUAL_SERVER"]:
-        app.add_url_rule('/<short_url>', view_func=redirect_link)
-except KeyError:
-    # No setting in the config file
-    pass
+#try:
+#    if app.config["DUAL_SERVER"]:
+#        app.add_url_rule('/<short_url>', view_func=redirect_link)
+#except KeyError:
+#    # No setting in the config file
+#    pass
 
 @app.route("/")
 def render_index(**kwargs):
@@ -107,9 +123,86 @@ def render_index(**kwargs):
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """Handles authentication."""
-    a = Auth(app.config['AUTH'], get_user)
-    return a.login(request, RULoginForm, render_login, login_success)
 
+    #a = Auth(app.config['AUTH'], get_user)
+    #return a.login(request, RULoginForm, render_login, login_success)
+
+    form = RULoginForm(request.form)
+
+    if request.method == "GET":
+        return render_template("login.html", login_error=False)
+
+    elif request.method == "POST":
+        if form.validate():
+        # We are missing a way to validate user logins, but that's for later
+        #   when we set up more of the infrastructure. Right now, we only
+        #   check if there are fields in the usename and password
+            user = models.User.objects.get(netid=request.form['username'])
+            if user.is_authenticated() and user.is_active():
+                login_user(user, remember=True)
+                return login_success(user)
+            else:
+                return render_template("login.html", login_error=True)
+        else:
+            return render_template("login.html", login_error=True)
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    
+    if request.method == "GET":
+        logout_user()
+        return render_template("logout.html")
+
+
+@app.route('/shorten', methods=['GET', 'POST'])
+@login_required
+def shorten():
+
+    if request.method == "GET":
+        return render_template("shorten.html", made_shortened_url=None)
+
+    elif request.method == "POST":
+        title = request.form['title']
+        long_url = request.form['url']
+
+        # if user is privileged, allow users to shorten name,
+        #   but that is for later
+
+	# Make sure that a shortened url is unique
+        short_url = client.generate_unique_key()
+        while models.Url.objects(short_url=short_url):
+            short_url = client.generate_unique_key()
+
+        return render_template("shorten.html", shortened_url=short_url)
+        
+
+@app.route("/<short_url>", methods=['GET'])
+def redirect_link(short_url):
+    """Redirects to the short URL's true destination.
+
+    This looks up the short URL's destination in the database and performs a
+    redirect, logging some information at the same time. If no such link exists,
+    a not found page is shown.
+
+    :Parameters:
+      - `short_url`: A string containing a shrunk-ified URL.
+    """
+    app.logger.info("{} requests {}".format(request.remote_addr, short_url))
+
+    # Perform a lookup and redirect
+    try:
+        url = models.Url.objects.get(short_url=short_url)
+    except DoesNotExist:
+        return render_template("link-404.html", short_url=short_url)
+
+    #visit(url, request.remote_addr)
+
+    # Check if a protocol exists
+    if "://" in url.long_url:
+        return redirect(url.long_url)
+    else:
+        return redirect("http://{}".format(url.long_url))
 
 class BannedDomainsListAPI(Resource):
     decorators = [login_required, admin_required(unauthorized_admin)]

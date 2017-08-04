@@ -6,7 +6,7 @@ from functools import wraps
 
 from flask_login import UserMixin, current_user
 from flask_auth import LoginForm
-import shrunk.appserver
+#import shrunk.appserver
 import shrunk.models as models
 from mongoengine import DoesNotExist
 

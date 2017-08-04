@@ -3,9 +3,11 @@
 """Application forms for shrunk."""
 
 import re
+import sys
 
 from wtforms import Form, TextField, BooleanField, PasswordField, RadioField, SelectField, validators, ValidationError
-from flask_auth import LoginForm
+#from flask_auth import LoginForm
+import shrunk.models as models
 from shrunk.user import USER_TYPES
 
 import shrunk.filters
@@ -66,19 +68,13 @@ class LinkForm(Form):
             data["short_url"] = self.short_url.data
         return data
 
+class RULoginForm(Form):
 
-class RULoginForm(LoginForm):
-    """A WTForm representing the login form.
-
-    :Fields:
-      - `username`: Text field for the user's NetID
-      - `password`: Password field for a NetID password
-    """
     username = TextField("Netid", validators=[
         validators.DataRequired(message="Please provide your NetID.")])
     password = PasswordField("Password", validators=[
         validators.DataRequired(message="Please provide a password.")])
-
+        
 
 class BlacklistUserForm(Form):
     """A WTForm for banning users.
