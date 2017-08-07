@@ -8,19 +8,6 @@ class User(Document):
     is_blacklisted   = BooleanField(required=True, default=False)
     type             = IntField(required=True, default=0)  # TODO: use choices?
 
-    def is_authenticated(self):
-        return not self.is_blacklisted
-
-    def is_active(self):
-        return not self.is_blacklisted
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.netid
-
-
 class Url(Document):
     meta = {'collection': 'urls'}
     short_url    = StringField(required=True, primary_key=True)

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Edit URL</h1>
+
+<form action="" method="post">
+    <label>Title</label>
+    <input type="text" name="title" value="{{ request.form.title }}" placeholder="{{ title }}">
+
+    <label>URL</label>
+    <input type="text" name="url" value="{{ request.form.url }}" placeholder="{{ url }}">
+
+    {% if alias %}
+    <label>Optional Alias</label>
+    <input type="text" name="alias" value="{{ request.form.alias }}" placeholder="{{ alias }}">
+    {% endif %}
+
+    <input type="submit" name="edit" value="Edit URL">
+
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+
+</form>
+
+
+{% endblock %}

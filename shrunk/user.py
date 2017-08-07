@@ -30,6 +30,24 @@ class User(UserMixin):
         self.netid = netid
         self.id = netid
 
+    def is_blacklisted(self):
+        return models.User.objects.get(netid=self.netid).is_blacklisted
+
+    def is_authenticated(self):
+        return not models.User.objects.get(netid=self.netid).is_blacklisted
+
+    def is_active(self):
+        return not models.User.objects.get(netid=self.netid).is_blacklisted
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.netid
+
+    def get_type(self):
+        return models.User.objects.get(netid=self.netid).type
+
     def is_admin(self):
         """Determines whether or not this user is an administrator."""
         return models.User.objects.get(netid=self.netid).type == \

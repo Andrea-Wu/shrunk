@@ -89,7 +89,7 @@ def login_success(user):
     #return redirect('/')
     
     app.logger.info("{}: login".format(user.netid))
-    return render_template("index.html", netid=user.netid, privilege=user.type)
+    return render_template("index.html", netid=user.get_id(), privilege=user.get_type())
 
 
 def unauthorized_admin():
@@ -105,6 +105,7 @@ def unauthorized_admin():
 #    pass
 
 @app.route("/")
+@app.route("/index")
 def render_index(**kwargs):
     if not hasattr(current_user, "netid"):
         # Anonymous user
@@ -126,6 +127,8 @@ def login():
 
     #a = Auth(app.config['AUTH'], get_user)
     #return a.login(request, RULoginForm, render_login, login_success)
+    if hasattr(current_user, "netid"):
+        return redirect("/index")
 
     form = RULoginForm(request.form)
 
@@ -137,7 +140,8 @@ def login():
         # We are missing a way to validate user logins, but that's for later
         #   when we set up more of the infrastructure. Right now, we only
         #   check if there are fields in the usename and password
-            user = models.User.objects.get(netid=request.form['username'])
+            #user = models.User.objects.get(netid=request.form['username'])
+            user = User(request.form['username'])
             if user.is_authenticated() and user.is_active():
                 login_user(user, remember=True)
                 return login_success(user)
@@ -159,22 +163,119 @@ def logout():
 @login_required
 def shorten():
 
+    user = User(current_user.netid)
+
     if request.method == "GET":
-        return render_template("shorten.html", made_shortened_url=None)
+        return render_template("shorten.html", elevated_user=user.is_elevated())
 
     elif request.method == "POST":
         title = request.form['title']
         long_url = request.form['url']
+        alias = None
 
-        # if user is privileged, allow users to shorten name,
+        # If the user is privileged, then we let the user specify an alias
         #   but that is for later
+        if current_user.is_elevated():
+            alias = request.form['alias']
 
-	# Make sure that a shortened url is unique
-        short_url = client.generate_unique_key()
-        while models.Url.objects(short_url=short_url):
-            short_url = client.generate_unique_key()
+        # If the user specified an alias, check if the alas has been taken.
+        # If it is taken, the user needs to specify another alias. Otherwise,
+        #   the alias is the shortened url key
+        if alias:
+            if models.Url.objects(short_url=alias):
+                return render_template("shorten.html", elevated_user=user.is_elevated(), \
+                                                       alias_taken=True)
+            else:
+                short_url_key = alias
 
-        return render_template("shorten.html", shortened_url=short_url)
+        # If the user is not an elevated user, or chooses not to specify an alias,
+        #   we create a shortened url
+        else:
+            # Make sure that a shortened url is unique
+            short_url_key = client.generate_unique_key()
+            while models.Url.objects(short_url=short_url_key):
+                short_url_key = client.generate_unique_key()
+            
+        # Adding the the short url (specifically the randomly generated
+        #   part) to the database to store it for future use.
+        # To add it, we need to provide the necessary entries. To get the
+        #   the current user, we use flask_login.current_user.
+        user_netid = user.netid
+        short_url_entry = models.Url(short_url=short_url_key, title=title, \
+                                     user=user_netid, long_url=long_url)
+        short_url_entry.save()
+
+        # This short hostname/port needs to abstracted away
+        short_url = "http://maguro.rutgers.edu:5000/" + short_url_key
+
+        return render_template("shorten.html", elevated_user=user.is_elevated(),
+                                               shortened_url=short_url)
+        
+
+@app.route('/edit_url', methods=['GET', 'POST'])
+@login_required
+def edit_link():
+
+    user = User(current_user.netid)
+    user_is_elevated = user.is_elevated() 
+
+    alias = None
+
+    # If the link does not specify the short url of the entry, then we can't do much
+    short_url = request.args.get('short_url')
+    if not short_url:
+        return render_template('link-404.html')
+    
+    try:
+        url = models.Url.objects.get(short_url=short_url)
+    except DoesNotExist:
+        if user.is_admin():
+            return render_template('edit_url.html', 
+                                    message="Link not found in the database", 
+                                    alias=user_is_elevated)
+        else:
+            return render_template('link-404.html')
+
+    if user.netid != url.user.netid and not user.is_admin():
+        return render_template('link-404.html')
+
+
+    if request.method == 'GET':
+
+        if user_is_elevated:
+            alias = url.short_url
+        return render_template('edit_url.html', title=url.title, \
+                               url=url.long_url, alias=alias)
+
+    elif request.method == 'POST':
+
+        short_url = request.args.get('short_url')
+
+        old_title, old_url = url.title, url.long_url
+        new_title, new_url = request.form['title'], request.form['url']
+
+        if user_is_elevated:
+            old_alias, new_alias = url.short_url, request.form['alias']
+        else:
+            old_alias, new_alias = url.short_url, url.short_url
+        
+        if old_title == new_title and old_url == new_url and old_alias == new_alias:
+            return render_template('edit_url.html', message="No changes made", alias=user_is_elevated)
+        else:
+            if old_alias != new_alias:
+                if models.Url.objects(short_url=new_alias):
+                    return render_template('edit_url.html', message='Alias is already taken',
+                                    title=url.title, url=url.long_url, alias=user_is_elevated)
+
+                new_url = models.Url(short_url=new_alias, long_url=new_url, user=current_user.netid, 
+                                     title=new_title)
+                new_url.save()
+                url.delete()
+            else:
+                url.title = new_title
+                url.long_url = new_url
+                url.save()
+            return render_template('edit_url.html', message="Changes Made", alias=user_is_elevated)
         
 
 @app.route("/<short_url>", methods=['GET'])

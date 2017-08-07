@@ -1,14 +1,10 @@
-<html>
+{% extends "base.html" %}
 
+{% block title %}Index{% endblock %}
 
-<title>Index</title>
-
-<body>
+{% block content %}
     <a href="{{ url_for('shorten') }}">Shorten URL</a>
     <a href="{{ url_for('logout') }}">Logout</a>
     <p>"{{ netid }}"</p>
     <p>"{{ privilege }}"</p>
-
-</body>
-
-</html>
+{% endblock %}
