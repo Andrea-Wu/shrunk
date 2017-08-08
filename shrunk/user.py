@@ -30,6 +30,12 @@ class User(UserMixin):
         self.netid = netid
         self.id = netid
 
+    def exists(self):
+        if models.User.objects(netid=self.netid):
+            return True
+        else:
+            return False
+
     def is_blacklisted(self):
         return models.User.objects.get(netid=self.netid).is_blacklisted
 
@@ -57,6 +63,16 @@ class User(UserMixin):
         """Determines whether or not this user is elevated or admin"""
         return models.User.objects.get(netid=self.netid).type >= \
                USER_TYPES['elevated']
+
+    def change_blacklist_status(self, status):
+        """Changes the blacklist status of the user"""
+        if type(status) != bool:
+            # Could use an app logging message
+            return False
+        user = models.User.objects.get(netid=self.netid)
+        user.is_blacklisted = status
+        user.save()
+        return True
 
     def __str__(self):
       """Returns the NetID of this user."""

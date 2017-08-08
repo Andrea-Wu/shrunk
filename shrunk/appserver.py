@@ -226,6 +226,9 @@ def edit_link():
     if not short_url:
         return render_template('link-404.html')
     
+    # Checks if the link is in the database. If the user is an admin, we report the
+    #   problem. Otherwise, link to a 404. Don't want those plebs (users) prod our
+    #   system for information
     try:
         url = models.Url.objects.get(short_url=short_url)
     except DoesNotExist:
@@ -236,12 +239,18 @@ def edit_link():
         else:
             return render_template('link-404.html')
 
+    # If the user is neither an admin nor the creator of the link, tell them to
+    #   get out
     if user.netid != url.user.netid and not user.is_admin():
         return render_template('link-404.html')
 
+    # If we made it this far, we have guaranteed that the user specified a link
+    #   to check, that the link exists, and that the user has the permissions
+    #   to edit the link
 
     if request.method == 'GET':
-
+        # Users with at least elevated privileges can specify an alias.
+        # Normies (standard users) don't get to change the alias
         if user_is_elevated:
             alias = url.short_url
         return render_template('edit_url.html', title=url.title, \
@@ -249,8 +258,7 @@ def edit_link():
 
     elif request.method == 'POST':
 
-        short_url = request.args.get('short_url')
-
+        # Get the short url 
         old_title, old_url = url.title, url.long_url
         new_title, new_url = request.form['title'], request.form['url']
 
@@ -259,9 +267,12 @@ def edit_link():
         else:
             old_alias, new_alias = url.short_url, url.short_url
         
+        # Don't make changes if nothing changed
         if old_title == new_title and old_url == new_url and old_alias == new_alias:
             return render_template('edit_url.html', message="No changes made", alias=user_is_elevated)
         else:
+            # Changing the alias (which in this case is the short url) means deleting the existing
+            #   the Url document and creating a new one because the short url is the primary key
             if old_alias != new_alias:
                 if models.Url.objects(short_url=new_alias):
                     return render_template('edit_url.html', message='Alias is already taken',
@@ -271,12 +282,67 @@ def edit_link():
                                      title=new_title)
                 new_url.save()
                 url.delete()
+
+            # Do some updates
             else:
                 url.title = new_title
                 url.long_url = new_url
                 url.save()
+
+            # Render the changes
             return render_template('edit_url.html', message="Changes Made", alias=user_is_elevated)
         
+
+@app.route("/block_url", methods=['GET', 'POST'])
+@login_required
+def block_link():
+
+    user = User(current_user.netid)
+    if not user.is_admin():
+        return render_template("link-404.html")
+
+    if request.method == 'GET':
+        return render_template("block_url.html", message=None)        
+
+    elif request.method == 'POST':
+        return render_template("block_url.html", message="So you wanna block a link?")
+
+
+@app.route("/blacklist", methods=['GET', 'POST'])
+@login_required
+def change_blacklist_status():
+
+    """
+    This function change the blacklist status of the user.
+    Currently, this route will handle both blacklisting and un-blacklisting of users
+    We need to plan a bit more about what data (users to list [blacklisted and not
+        blacklisted]). It might be cool if our webpage supports searching and autofill
+        capabilities.
+    """
+    user = User(current_user.netid)
+    if not user.is_admin():
+        return render_template("link-404.html")
+
+    if request.method == 'GET':
+        blacklisted_users = models.User.objects(is_blacklisted=True)
+        return render_template("blacklist.html", message=None, blacklisted_users=blacklisted_users)
+
+    elif request.method == 'POST':
+        app.logger.info("bingbong")
+        #app.logger.info(models.User.objects(is_blacklisted=True))
+        blacklisted_users = models.User.objects(is_blacklisted=True)
+        #app.logger.info(blacklisted_users)
+
+        app.logger.info(request.form['user'])
+        user_to_blacklist = User(request.form['user'])
+        
+        if not user_to_blacklist.exists():
+            return render_template("blacklist.html", message="User does not exist", blacklisted_users=blacklisted_users)
+
+        app.logger.info("bingbong")
+        user_to_blacklist.change_blacklist_status(False)
+        return render_template("blacklist.html", message="Change Performed", blacklisted_users=blacklisted_users)
+
 
 @app.route("/<short_url>", methods=['GET'])
 def redirect_link(short_url):
@@ -304,6 +370,7 @@ def redirect_link(short_url):
         return redirect(url.long_url)
     else:
         return redirect("http://{}".format(url.long_url))
+
 
 class BannedDomainsListAPI(Resource):
     decorators = [login_required, admin_required(unauthorized_admin)]
