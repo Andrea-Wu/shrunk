@@ -1,0 +1,85 @@
+<div ng-controller="shortenController">
+    <div class="jumbotron">
+            <div class="row" style="text-align:center;"> 
+                <img id='focuspic' src='assets/shrunkfocus.png' />
+            </div>
+
+            <div id='subjumbo' class='container-fluid'>
+                <div class="topelement textcenter">
+                    <button id="primarybtn" class="btn primary">Shorten URL</button>
+                </div> 
+                <div class="row">
+                    <div id="inputGroup">
+                        <form id="inputForm" name="FORM">
+                            <div class="formlable">Title</div>
+                            <div id="titleinput" class="" style="padding-right:0;">
+                                <input id="idtitle" type="text" class="form-control" name="Title" ng-model="newrow.title" ng-required="true" placeholder="Creat link title..."/>
+                            </div>
+
+                            <div class="formlable">URL</div>
+                            <div class="" style="padding-right:0;">
+                                <input id="longurl" name="longUrl" type="text" class="form-control" ng-model="newrow.longUrl" ng-required="true" placeholder="Paste a URL here..."/>
+                            </div>
+
+                            <div class="formlable">Alias (Optional)</div>
+                            <div class="" style="padding-right:0;">
+                                <input id="" name="" type="text" class="form-control" ng-model="newrow.alias" ng-required="true" placeholder="Create alias..."/>
+                            </div>
+                            
+                            <div style="text-align:center; margin-bottom:0;">    
+                                <button class="btn blue" type="button" background="#E91E63" id="shortenbtn" name="submit" ng-model="triggered" ng-click="addRow()" ng-disabled="(FORM.longUrl.$invalid)||(FORM.Title.$invalid)">Shorten</button>
+                            </div>    
+                        </form>    
+                    </div>
+                </div>
+
+                <div class="row" id="box1">
+                    <div class="container-fluid" id="history">
+                        <div id="editInput">
+                            <div class="row width90 verticalalign">
+                                <div class="col-sm-3 no-padding">Title: <input class="editD" type="text" ng-model="current.title" value="{{current.title}}"/></div>
+                                <div class="col-sm-4 no-padding">Short URL: <input class="editD" type="text" ng-model="current.shortUrl" value="{{current.shortUrl}}"/></div>
+                                <div class="col-sm-3 no-padding">Alias: <input class="editD" type="text" ng-model="current.alias" value="{{current.alias}}"/></div>
+                                <div class="col-sm-1 no-padding"><button id="saveIcon" class="btn primary" ng-click="saveData(current)">save</button></div>
+                            </div>
+                        </div>
+                        <div  class="whitebgbox" ng-repeat="result in results | beginWith:(currentPage - 1) * pageSize | limitTo:pageSize | filter: searchText">
+                            <div class="innerdiv">
+                                <div style="font-weight:bold; color:white;">{{result.title}}</div>
+                                <div class="rowtd">Short URL: {{result.shortUrl}}</div>
+                                <div class="rowtd">Alias: {{result.alias}}</div>
+                                <div class="clear"></div>
+                                <div class="rowtd">Long URL: {{result.longUrl}}</div>
+                                <div class="rowtd">Created: {{result.timeCreated | date:"MM/dd/yyyy"}}</div>
+                                <div class="clear"></div>
+                            </div>    
+                            <div class="menubox" style="text-align:center;"><a id="showToggle" ng-click="clicked=!clicked"><span class="glyphicon glyphicon-option-horizontal"></span><span class="glyphicon glyphicon-option-horizontal"></span></a></div>
+                            <div id="hiddenData" ng-if="clicked" class="innerdiv">
+                                <div class="clear"></div>     
+                                <div class="clear"></div>    
+                                <div class="rowtd">Total Views: {{result.externalView + result.internalView}}</div>
+                                <div class="clear"></div>
+                                <div class="rowtd">External Views: {{result.externalView}}</div>
+                                <div class="rowtd">Internal Views: {{result.internalView}}</div>
+                                <div class="clear"></div>
+                                <div style="text-align:center;">
+                                    <div class="btn-group" role="group">
+                                        <a type="button" class="btn btn-secondary" ng-click="editData(result)">Edit</a>
+                                        <a type="button" class="btn btn-secondary" href="#/stat/{{$index}}">View Stats</a>
+                                        <a type="button" class="btn btn-secondary" ng-click="removeRow(result)">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="topelement textcenter">
+                    <ul id="pagination" uib-pagination-total-items="results.length" ng-model="currentPage" items-per-page="pageSize" max-size="4" class="pagination" boundary-link-numbers="true" rotate="false" ng-show="results.length > 4"></ul>
+                </div>
+            </div>
+	</div>
+    </div>
+
+<!--    <div ng-include="'includes/pictures.html'"></div>-->
+
+<!--http://placehold.it/150x80?text=IMAGE*/-->
