@@ -27,6 +27,7 @@ app.config.from_pyfile("config.py", silent=True)
 
 #from shrunk.linkserver import redirect_link
 from shrunk.user import admin_required, elevated_required, User, get_user
+from shrunk.url import Url
 from shrunk.util import set_logger, formattime, gen_qr, db_to_response_dict
 from shrunk.forms import RULoginForm, UserForm
 from shrunk.filters import strip_protocol, ensure_protocol
@@ -111,14 +112,11 @@ def render_index(**kwargs):
         # Anonymous user
         return redirect("/login")
 
-    # Add user if it does not exist
-    try:
-        user = models.User.objects.get(netid=current_user.netid)
-    except DoesNotExist:
-        user = models.User(netid=current_user.netid)
-        user.save()
-
-    return render_template("index.html", netid=current_user.netid)
+    user = User(current_user.netid)
+    if user.exists():
+        return render_template("index.html", netid=current_user.netid)
+    else: 
+        render_template("link-404.html")
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -181,8 +179,9 @@ def shorten():
         # If the user specified an alias, check if the alas has been taken.
         # If it is taken, the user needs to specify another alias. Otherwise,
         #   the alias is the shortened url key
+
         if alias:
-            if models.Url.objects(short_url=alias):
+            if Url(alias).exists():
                 return render_template("shorten.html", elevated_user=user.is_elevated(), \
                                                        alias_taken=True)
             else:
@@ -193,17 +192,18 @@ def shorten():
         else:
             # Make sure that a shortened url is unique
             short_url_key = client.generate_unique_key()
-            while models.Url.objects(short_url=short_url_key):
+            while Url(alias).exist():
                 short_url_key = client.generate_unique_key()
             
         # Adding the the short url (specifically the randomly generated
         #   part) to the database to store it for future use.
         # To add it, we need to provide the necessary entries. To get the
         #   the current user, we use flask_login.current_user.
-        user_netid = user.netid
-        short_url_entry = models.Url(short_url=short_url_key, title=title, \
-                                     user=user_netid, long_url=long_url)
-        short_url_entry.save()
+        url_entry = Url(short_url_key)
+        url_entry.set_title(title)
+        url_entry.set_long_url(long_url)
+        url_entry.set_creator(user.netid)
+        url_entry.save_new_link_to_db()
 
         # This short hostname/port needs to abstracted away
         short_url = "http://maguro.rutgers.edu:5000/" + short_url_key
@@ -217,8 +217,6 @@ def shorten():
 def edit_link():
 
     user = User(current_user.netid)
-    user_is_elevated = user.is_elevated() 
-
     alias = None
 
     # If the link does not specify the short url of the entry, then we can't do much
@@ -229,19 +227,18 @@ def edit_link():
     # Checks if the link is in the database. If the user is an admin, we report the
     #   problem. Otherwise, link to a 404. Don't want those plebs (users) prod our
     #   system for information
-    try:
-        url = models.Url.objects.get(short_url=short_url)
-    except DoesNotExist:
+    url = Url(short_url)
+    if not url.exists():
         if user.is_admin():
             return render_template('edit_url.html', 
                                     message="Link not found in the database", 
-                                    alias=user_is_elevated)
+                                    alias=user.is_elevated())
         else:
             return render_template('link-404.html')
 
     # If the user is neither an admin nor the creator of the link, tell them to
     #   get out
-    if user.netid != url.user.netid and not user.is_admin():
+    if user.netid != url.creator and not user.is_admin():
         return render_template('link-404.html')
 
     # If we made it this far, we have guaranteed that the user specified a link
@@ -251,7 +248,7 @@ def edit_link():
     if request.method == 'GET':
         # Users with at least elevated privileges can specify an alias.
         # Normies (standard users) don't get to change the alias
-        if user_is_elevated:
+        if user.is_elevated():
             alias = url.short_url
         return render_template('edit_url.html', title=url.title, \
                                url=url.long_url, alias=alias)
@@ -262,35 +259,37 @@ def edit_link():
         old_title, old_url = url.title, url.long_url
         new_title, new_url = request.form['title'], request.form['url']
 
-        if user_is_elevated:
+        if user.is_elevated():
             old_alias, new_alias = url.short_url, request.form['alias']
         else:
             old_alias, new_alias = url.short_url, url.short_url
         
         # Don't make changes if nothing changed
         if old_title == new_title and old_url == new_url and old_alias == new_alias:
-            return render_template('edit_url.html', message="No changes made", alias=user_is_elevated)
+            return render_template('edit_url.html', message="No changes made", alias=user.is_elevated())
         else:
             # Changing the alias (which in this case is the short url) means deleting the existing
             #   the Url document and creating a new one because the short url is the primary key
             if old_alias != new_alias:
                 if models.Url.objects(short_url=new_alias):
                     return render_template('edit_url.html', message='Alias is already taken',
-                                    title=url.title, url=url.long_url, alias=user_is_elevated)
+                                    title=url.title, url=url.long_url, alias=user.is_elevated())
 
-                new_url = models.Url(short_url=new_alias, long_url=new_url, user=current_user.netid, 
-                                     title=new_title)
-                new_url.save()
-                url.delete()
+                new_entry = Url(new_alias)
+                new_entry.set_creator(user.netid)
+                new_entry.set_long_url(new_url)
+                new_entry.set_title(new_title)
+                new_entry.save_new_link_to_db()
+                url.delete_from_db()
 
             # Do some updates
             else:
                 url.title = new_title
                 url.long_url = new_url
-                url.save()
+                url.update_db()
 
             # Render the changes
-            return render_template('edit_url.html', message="Changes Made", alias=user_is_elevated)
+            return render_template('edit_url.html', message="Changes Made", alias=user.is_elevated())
         
 
 @app.route("/block_url", methods=['GET', 'POST'])
@@ -358,9 +357,8 @@ def redirect_link(short_url):
     app.logger.info("{} requests {}".format(request.remote_addr, short_url))
 
     # Perform a lookup and redirect
-    try:
-        url = models.Url.objects.get(short_url=short_url)
-    except DoesNotExist:
+    url = Url(short_url)
+    if not url.exists():
         return render_template("link-404.html", short_url=short_url)
 
     #visit(url, request.remote_addr)
