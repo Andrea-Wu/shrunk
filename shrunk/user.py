@@ -74,6 +74,10 @@ class User(UserMixin):
         user.save()
         return True
 
+    def add_new_user(self):
+        new_user = models.User(netid=self.netid)
+        new_user.save()
+
     def __str__(self):
       """Returns the NetID of this user."""
       return self.netid

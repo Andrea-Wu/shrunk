@@ -18,16 +18,14 @@ from flask_restful import Resource, Api, reqparse
 global app
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
-print(app.template_folder)
 api = Api(app)
 
 app.config.from_pyfile("config.py", silent=True)
-#from pprint import pprint
-#pprint(app.config)
 
 #from shrunk.linkserver import redirect_link
 from shrunk.user import admin_required, elevated_required, User, get_user
 from shrunk.url import Url
+from shrunk.blocked_domain import Blocked_Domain
 from shrunk.util import set_logger, formattime, gen_qr, db_to_response_dict
 from shrunk.forms import RULoginForm, UserForm
 from shrunk.filters import strip_protocol, ensure_protocol
@@ -56,6 +54,7 @@ if app.config["DB_REPL"] != "":
 else:
     connect(app.config["DB_DATABASE"], host=app.config["DB_HOST"], 
             port=app.config["DB_PORT"])
+
 
 
 @login_manager.user_loader
@@ -113,11 +112,10 @@ def render_index(**kwargs):
         return redirect("/login")
 
     user = User(current_user.netid)
-    if user.exists():
-        return render_template("index.html", netid=current_user.netid)
-    else: 
-        render_template("link-404.html")
+    if not user.exists():
+        user
 
+    return render_template("index.html", netid=current_user.netid)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -128,18 +126,20 @@ def login():
     if hasattr(current_user, "netid"):
         return redirect("/index")
 
-    form = RULoginForm(request.form)
-
     if request.method == "GET":
         return render_template("login.html", login_error=False)
 
     elif request.method == "POST":
+        #form = RULoginForm(request.form, load_user)
         if form.validate():
         # We are missing a way to validate user logins, but that's for later
         #   when we set up more of the infrastructure. Right now, we only
         #   check if there are fields in the usename and password
             #user = models.User.objects.get(netid=request.form['username'])
             user = User(request.form['username'])
+            #a = Auth(app.config['AUTH'], get_user)
+            return a.login(request, RULoginForm, render_login, login_success)
+
             if user.is_authenticated() and user.is_active():
                 login_user(user, remember=True)
                 return login_success(user)
@@ -301,10 +301,31 @@ def block_link():
         return render_template("link-404.html")
 
     if request.method == 'GET':
-        return render_template("block_url.html", message=None)        
+        return render_template("block_url.html")        
 
     elif request.method == 'POST':
-        return render_template("block_url.html", message="So you wanna block a link?")
+        url_to_block = Blocked_Domain(request.form['url'])
+        if url_to_block.is_blocked():
+            return render_template("block_url.html", message="The link is already blocked")
+
+        url_to_block.set_blocking_user(current_user.netid)
+        url_to_block.block_url()
+        return render_template("block_url.html", message="The link has been blocked")
+
+@app.route("/unblock_url", methods=['POST'])
+@login_required
+def unblock_link()
+    user = User(current_user.netid)
+    if not user.is_admin():
+        return render_template("link-404.html")
+
+    if request.method == 'POST':
+        url_to_unblock = Blocked_Domain(request.form['url'])
+        if not url_to_unblock.is_blocked():
+            return render_template("block_url.html", message="The link is already unblocked")
+
+        url_to_unblock.unblock_url()
+        return render_template("block_url.html", message="The link has been unblocked")
 
 
 @app.route("/blacklist", methods=['GET', 'POST'])
@@ -327,10 +348,7 @@ def change_blacklist_status():
         return render_template("blacklist.html", message=None, blacklisted_users=blacklisted_users)
 
     elif request.method == 'POST':
-        app.logger.info("bingbong")
-        #app.logger.info(models.User.objects(is_blacklisted=True))
         blacklisted_users = models.User.objects(is_blacklisted=True)
-        #app.logger.info(blacklisted_users)
 
         app.logger.info(request.form['user'])
         user_to_blacklist = User(request.form['user'])
@@ -338,7 +356,6 @@ def change_blacklist_status():
         if not user_to_blacklist.exists():
             return render_template("blacklist.html", message="User does not exist", blacklisted_users=blacklisted_users)
 
-        app.logger.info("bingbong")
         user_to_blacklist.change_blacklist_status(False)
         return render_template("blacklist.html", message="Change Performed", blacklisted_users=blacklisted_users)
 
@@ -359,7 +376,11 @@ def redirect_link(short_url):
     # Perform a lookup and redirect
     url = Url(short_url)
     if not url.exists():
-        return render_template("link-404.html", short_url=short_url)
+        return render_template("link-404.html")
+
+    domain = Blocked_Domain(url.long_url)
+    if domain.is_blocked():
+        return render_template("link-403.html")
 
     #visit(url, request.remote_addr)
 
