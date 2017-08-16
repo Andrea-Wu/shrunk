@@ -11,7 +11,7 @@ from time import sleep
 from flask import (Flask, render_template, make_response, request, redirect, 
                    g, jsonify, abort)
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
-from flask_auth import Auth
+#from flask_auth import Auth
 from flask_restful import Resource, Api, reqparse
 
 # Create application
@@ -130,7 +130,7 @@ def login():
         return render_template("login.html", login_error=False)
 
     elif request.method == "POST":
-        #form = RULoginForm(request.form, load_user)
+        form = RULoginForm(request.form, load_user)
         if form.validate():
         # We are missing a way to validate user logins, but that's for later
         #   when we set up more of the infrastructure. Right now, we only
@@ -138,7 +138,7 @@ def login():
             #user = models.User.objects.get(netid=request.form['username'])
             user = User(request.form['username'])
             #a = Auth(app.config['AUTH'], get_user)
-            return a.login(request, RULoginForm, render_login, login_success)
+            #return a.login(request, RULoginForm, render_login, login_success)
 
             if user.is_authenticated() and user.is_active():
                 login_user(user, remember=True)
@@ -314,7 +314,7 @@ def block_link():
 
 @app.route("/unblock_url", methods=['POST'])
 @login_required
-def unblock_link()
+def unblock_link():
     user = User(current_user.netid)
     if not user.is_admin():
         return render_template("link-404.html")

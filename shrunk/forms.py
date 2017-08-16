@@ -6,7 +6,7 @@ import re
 import sys
 
 from wtforms import Form, TextField, BooleanField, PasswordField, RadioField, SelectField, validators, ValidationError
-from flask_auth import LoginForm
+#from flask_auth import LoginForm
 import shrunk.models as models
 from shrunk.user import USER_TYPES
 
@@ -68,7 +68,7 @@ class LinkForm(Form):
             data["short_url"] = self.short_url.data
         return data
 
-class RULoginForm(LoginForm):
+class RULoginForm(Form):
 
     username = TextField("Netid", validators=[
         validators.DataRequired(message="Please provide your NetID.")])
