@@ -23,7 +23,7 @@ api = Api(app)
 app.config.from_pyfile("config.py", silent=True)
 
 #from shrunk.linkserver import redirect_link
-from shrunk.user import admin_required, elevated_required, User, get_user
+from shrunk.user import admin_required, elevated_required, User, get_user, USER_TYPES
 from shrunk.url import Url
 from shrunk.blocked_domain import Blocked_Domain
 from shrunk.util import set_logger, formattime, gen_qr, db_to_response_dict
@@ -140,6 +140,8 @@ def login():
             #a = Auth(app.config['AUTH'], get_user)
             #return a.login(request, RULoginForm, render_login, login_success)
 
+            app.logger.info("validated")
+            app.logger.info(user.is_authenticated())
             if user.is_authenticated() and user.is_active():
                 login_user(user, remember=True)
                 return login_success(user)
@@ -147,6 +149,7 @@ def login():
                 return render_template("login.html", login_error=True)
         else:
             return render_template("login.html", login_error=True)
+
 
 @app.route('/logout', methods=['GET'])
 @login_required
@@ -304,7 +307,7 @@ def block_link():
         return render_template("block_url.html")        
 
     elif request.method == 'POST':
-        url_to_block = Blocked_Domain(request.form['url'])
+        url_to_block = Blocked_Domain(request.form['block_url'])
         if url_to_block.is_blocked():
             return render_template("block_url.html", message="The link is already blocked")
 
@@ -312,25 +315,30 @@ def block_link():
         url_to_block.block_url()
         return render_template("block_url.html", message="The link has been blocked")
 
-@app.route("/unblock_url", methods=['POST'])
+
+@app.route("/unblock_url", methods=['GET', 'POST'])
 @login_required
 def unblock_link():
+
     user = User(current_user.netid)
     if not user.is_admin():
         return render_template("link-404.html")
 
-    if request.method == 'POST':
-        url_to_unblock = Blocked_Domain(request.form['url'])
+    if request.method == 'GET':
+        return render_template("unblock_url.html", message="None")
+
+    elif request.method == 'POST':
+        url_to_unblock = Blocked_Domain(request.form['unblock_url'])
         if not url_to_unblock.is_blocked():
-            return render_template("block_url.html", message="The link is already unblocked")
+            return render_template("unblock_url.html", message="The link is already unblocked")
 
         url_to_unblock.unblock_url()
-        return render_template("block_url.html", message="The link has been unblocked")
+        return render_template("unblock_url.html", message="The link has been unblocked")
 
 
 @app.route("/blacklist", methods=['GET', 'POST'])
 @login_required
-def change_blacklist_status():
+def blacklist_status():
 
     """
     This function change the blacklist status of the user.
@@ -344,20 +352,81 @@ def change_blacklist_status():
         return render_template("link-404.html")
 
     if request.method == 'GET':
-        blacklisted_users = models.User.objects(is_blacklisted=True)
-        return render_template("blacklist.html", message=None, blacklisted_users=blacklisted_users)
+        return render_template("blacklist.html", message=None)
 
     elif request.method == 'POST':
-        blacklisted_users = models.User.objects(is_blacklisted=True)
 
         app.logger.info(request.form['user'])
         user_to_blacklist = User(request.form['user'])
         
         if not user_to_blacklist.exists():
-            return render_template("blacklist.html", message="User does not exist", blacklisted_users=blacklisted_users)
+            return render_template("blacklist.html", message="User does not exist")
 
-        user_to_blacklist.change_blacklist_status(False)
-        return render_template("blacklist.html", message="Change Performed", blacklisted_users=blacklisted_users)
+        if user_to_blacklist.is_blacklisted():
+            return render_template("blacklist.html", message="User is already blacklisted")
+
+        user_to_blacklist.change_blacklist_status(True)
+        return render_template("blacklist.html", message="Change Performed")
+
+
+@app.route("/unblacklist", methods=['GET', 'POST'])
+@login_required
+def unblacklist():
+
+    user = User(current_user.netid)
+    if not user.is_admin():
+        return render_template("link-404.html")
+
+    if request.method == 'GET':
+        return render_template("unblacklist.html", message=None)
+
+    elif request.method == 'POST':
+        
+        user_to_unblacklist = User(request.form['user'])
+
+        if not user_to_unblacklist.exists():
+            return render_template("unblacklist.html", message="User does not exist")
+
+        if not user_to_unblacklist.is_blacklisted():
+            return render_template("unblacklist.html", message="User is already unblacklisted")
+
+        user_to_unblacklist.change_blacklist_status(False)
+        return render_template("unblacklist.html", message="Change Performed")
+
+
+@app.route("/user_priv", methods=['GET', 'POST'])
+@login_required
+def change_user_status():
+
+    cur_user = User(current_user.netid)
+    if not cur_user.is_admin():
+        return render_template("link-404.html")
+
+    if request.method == 'GET':
+        return render_template("user_privileges.html", message=None)
+
+    elif request.method == 'POST':
+
+        allowed_privileges = USER_TYPES.keys()
+        new_priv_string = request.form['privileges'].lower()
+        user = User(request.form['user'])
+
+        if new_priv_string.isalpha() and new_priv_string in allowed_privileges:
+            if not user.exists():
+                return render_template("user_privileges.html", message="User does not exist in the database")
+
+            new_privileges = USER_TYPES[new_priv_string]
+            current_privileges = user.get_type()
+
+            if new_privileges == current_privileges:
+                return render_template("user_privileges.html", message="The same privileges are maintained")
+            else:
+                user.change_user_privileges(new_privileges)
+                return render_template("user_privileges.html", message="Privileges have been updated")
+
+        else:
+            msg = "Only the following privileges are allowed: " + ", ".join(allowed_privileges)
+            return render_template("user_privileges.html", message=msg)
 
 
 @app.route("/<short_url>", methods=['GET'])

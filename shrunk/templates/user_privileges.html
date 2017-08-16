@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>User Privileges</h1>
+
+<form action="" method="post">
+
+<label>Change User Privileges</label>
+<p>Privilege Types: standard, elevated, admin </p>
+
+<label>Username</label>
+<input type="text" name="user" value="{{ request.form.user }}">
+
+<label>Privilege</label>
+<input type="text" name="privileges" value="{{ request.form.privileges }}">
+
+<input type="submit" name="change_privileges" value="Change Privileges">
+</form>
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+{% endblock %}

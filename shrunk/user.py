@@ -74,6 +74,14 @@ class User(UserMixin):
         user.save()
         return True
 
+    def change_user_privileges(self, priv_num):
+        if priv_num in USER_TYPES.values():
+            user = models.User.objects.get(netid=self.netid)
+            user.type = priv_num
+            user.save()
+            return True
+        return False
+
     def add_new_user(self):
         new_user = models.User(netid=self.netid)
         new_user.save()

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Blacklist User</h1>
+<h1>Unblacklist User</h1>
 
 <form action="" method="post">
 
-<label>Blacklist Users</label>
+<label>Unblacklist Users</label>
 <input type="text" name="user" value="{{ request.form.user }}">
 
-<input type="submit" name="blacklist" value="Blacklist">
+<input type="submit" name="unblacklist" value="Unblacklist">
 </form>
 
 {% if message %}
