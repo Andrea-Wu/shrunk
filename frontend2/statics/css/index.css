@@ -1,0 +1,123 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(-45deg, #ff7070, #fc2525); }
+
+#main {
+  width: 60%;
+  height: 80%;
+  display: flex;
+  flex-flow: column;
+  background: linear-gradient(-45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8));
+  align-items: center; }
+
+#body-header {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%; }
+  #body-header p {
+    color: white;
+    font-family: "Muli", Helvetica, sans-serif; }
+
+#body-header-divider {
+  margin-right: 20px;
+  margin-left: 20px; }
+
+#main-body {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 400px; }
+
+#title {
+  display: flex;
+  width: 100%;
+  flex-flow: column;
+  align-items: center; }
+
+#primary-title-container {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%; }
+  #primary-title-container img {
+    width: 80px;
+    height: auto; }
+
+#title-container {
+  height: 80px;
+  font-family: "Muli", Helvetica, sans-serif;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin-left: 30px;
+  font-size: 60px; }
+
+#subtitle-container {
+  font-family: "Muli", Helvetica, sans-serif;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  color: white;
+  font-size: 20px; }
+
+#login-form {
+  display: flex;
+  width: 100%;
+  flex-flow: column;
+  align-items: center; }
+
+.form-login-input {
+  width: 100%;
+  height: 50px; }
+
+#password {
+  margin-top: 30px;
+  margin-bottom: 30px; }
+
+#password, #username {
+  font-size: 20px;
+  padding-left: 10px;
+  font-family: "Muli", Helvetica, sans-serif;
+  outline: none;
+  user-select: none;
+  background: rgba(255, 255, 255, 0);
+  border-width: 0px 0px 1px 0px; }
+
+input {
+  color: #ffffff; }
+
+#login-btn {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  font-family: "Muli", Helvetica, sans-serif;
+  background: #fc2525;
+  color: white;
+  transition: all 0.25s ease;
+  user-select: none;
+  align-items: center; }
+
+#login-btn:hover {
+  cursor: pointer;
+  background: #f9e0e0;
+  color: #fc2525; }
+
+#login-btn:active {
+  background: white; }
+
+/*# sourceMappingURL=index.css.map */

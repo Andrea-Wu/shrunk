@@ -1,0 +1,130 @@
+@import "imports/_styles";
+
+html, body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(-45deg, #ff7070, $main-red);
+}
+
+#main {
+    width: 60%;
+    height: 80%;
+    display: flex;
+    flex-flow: column;
+    background: linear-gradient(-45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8));
+    align-items: center;
+}
+
+#body-header {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    p {
+        color: white;
+        font-family: $font-stack;
+    }
+}
+
+#body-header-divider {
+    margin-right: 20px;
+    margin-left: 20px; }
+
+#main-body {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 400px; }
+
+#title {
+    display: flex;
+    width: 100%;
+    flex-flow: column;
+    align-items: center;
+}
+
+#primary-title-container {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    img {
+        width: 80px;
+        height: auto; }
+}
+
+#title-container {
+    height: 80px;
+    font-family: $font-stack;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin-left: 30px;
+    font-size: 60px; }
+
+#subtitle-container {
+    font-family: $font-stack;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 20px; }
+
+#login-form {
+    display: flex;
+    width: 100%;
+    flex-flow: column;
+    align-items: center;
+}
+
+.form-login-input {
+    width: 100%;
+    height: 50px; }
+
+#password {
+    margin-top: 30px;
+    margin-bottom: 30px; }
+
+#password, #username {
+    font-size: 20px;
+    padding-left: 10px;
+    font-family: $font-stack;
+    outline: none;
+    user-select: none;
+    background: rgba(255, 255, 255, 0);
+    border-width: 0px 0px 1px 0px; }
+
+input {
+    color: #ffffff; }
+
+#login-btn {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    font-family: $font-stack;
+    background: $main-red;
+    color: white;
+    transition: all 0.25s ease;
+    user-select: none;
+    align-items: center; }
+
+#login-btn:hover {
+    cursor: pointer;
+    background: $lighter-red;
+    color: $main-red; }
+
+#login-btn:active {
+    background: white; }
