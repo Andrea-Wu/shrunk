@@ -1,0 +1,57 @@
+p, input {
+  font-family: "Muli", Helvetica, sans-serif; }
+
+#fields, #url-containers, .url-line {
+  width: 100%;
+  display: flex;
+  align-items: center; }
+
+#fields, #url-containers {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px; }
+
+#url-containers {
+  flex-flow: column; }
+
+#fields, .url-line {
+  flex-flow: row; }
+
+#fields {
+  height: 50px; }
+
+.url-line {
+  height: 30px; }
+
+.creation-field {
+  width: 300px; }
+
+.modified-field {
+  width: 300px; }
+
+.shrunken-field {
+  width: 300px; }
+
+.long-field {
+  margin-right: 10px; }
+
+.long-field, .long-field input {
+  width: 100%; }
+
+.actions-field {
+  width: 300px; }
+
+#action-icons {
+  display: flex;
+  flex-flow: row;
+  height: 100%; }
+  #action-icons img {
+    height: 100%;
+    width: auto; }
+
+#delete {
+  margin-right: 5px;
+  margin-left: 5px; }
+
+/*# sourceMappingURL=user_dashboard.css.map */

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- scripts -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous">
+        </script>
+        {% block jsfiles %}{% endblock %}
+        <!-- css -->
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Muli'>
+        <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/dash_base.css') }}">
+        {% block cssfiles %}{% endblock %}
+    </head>
+    <body>
+        <div id='header'>
+            <div id='logo-container'>
+                <img src='../statics/images/ru_shield.png'>
+            </div>
+            <div id='header-container'>
+                {% block header %}{% endblock %}
+            </div>
+        </div>
+        <div id='main'>
+            {% block mainblock %}{% endblock %}
+        </div>
+        <div id='footer'>
+            {% include 'footer.html' %}
+        </div>
+    </body>
+</html>

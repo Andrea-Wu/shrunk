@@ -1,0 +1,14 @@
+<div id='paginate-bar'>
+    <div id='backward-arrow'>
+        <img src="{{ url_for('static', filename='images/arrow_left.png') }}">
+    </div>
+    <div id='pages'>
+        {{ for page in pages }}
+        <div id='page-{{page.n}}' class='page-item'>
+            <p> {{page.n}} </p>
+        </div>
+    </div>
+    <div id='forward-arrow'>
+        <img src="{{ url_for('static', filename='images/arrow_right.png') }}">
+    </div>
+</div>

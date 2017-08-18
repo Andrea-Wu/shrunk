@@ -1,0 +1,16 @@
+{% extends 'dash_base.html' %}
+{% block jsfiles %}{% endblock %}
+{% block cssfiles %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/admin_dash.css') }}">
+{% endblock %}
+{% block header %}
+<div id='controls'>
+    <div class='page' id='users-page'> <p> Users </p> </div>
+    <div class='page' id='urls-page'> <p> Urls </p> </div>
+</div>
+{% endblock %}
+{% block mainblock %}
+<div id='list-container'>
+
+</div>
+{% endblock %}

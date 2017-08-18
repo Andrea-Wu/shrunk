@@ -1,0 +1,38 @@
+{% extends 'dash_base.html' %}
+
+{% block jsfiles %}
+{% endblock %}
+
+{% block cssfiles %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block mainblock %}
+<div id='fields'>
+    <div class='creation-field'> <p> Creation Date </p> </div>
+    <div class='modified-field'> <p> Modified Date </p> </div>
+    <div class='shrunken-field'> <p> Shrunken Url </p> </div>
+    <div class='long-field'> <p> Long Url </p> </div>
+    <div class='actions-field'> <p> Actions </p> </div>
+</div>
+<div id='url-containers'>
+    {% for url in urls %}
+    <div class='url-line'>
+        <p class='creation-field'> {{ url.creation_time }}  </p>
+        <p class='modified-field'> {{ url.modified_time }} </p>
+        <p class='shrunken-field'> {{ url.shortened_url }}  </p>
+        <div class='long-field'>
+            <input type='text' id='long-input' value="{{ url.long_url }}">
+        </div>
+        <div class='actions-field' id='action-icons'>
+            <img src='../statics/images/edit.png' id='edit'>
+            <img src='../statics/images/delete.png' id='delete'>
+            <img src='../statics/images/stats.png' id='stats'>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+@import "imports/styles";
+
+#controls {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+    div {
+        width: 200px;
+        p {
+            color: white;
+            font-family: $font-stack; }
+    }
+}
+
+#users-page {
+    margin-left: 10px; }
