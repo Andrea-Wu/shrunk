@@ -7,7 +7,6 @@ import io
 import base64
 import pyqrcode
 import json
-import os
 
 
 def set_logger(app):
@@ -16,10 +15,9 @@ def set_logger(app):
     :Parameters:
       - `app`: A Flask application object.
     """
-
     handler = logging.FileHandler(app.config["LOG_FILENAME"])
     handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter("%(levelname)s %(asctime)s: %(message)s [in %(pathname)s:%(lineno)d]"))
+    handler.setFormatter(logging.Formatter(app.config["LOG_FORMAT"]))
     app.logger.addHandler(handler)
 
 

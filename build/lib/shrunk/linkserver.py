@@ -1,7 +1,7 @@
 # shrunk - Rutgers University URL Shortener
 
 """Flask application for the link server."""
-import os
+
 from flask import Flask, render_template, request, redirect, g
 import shrunk.util
 from shrunk.models import Url
@@ -12,10 +12,7 @@ from mongoengine import connect, DoesNotExist
 # Create application
 app = Flask(__name__)
 
-# Change directories, or else program breaks
-os.chdir("/heroes/u1/ayw19/shrunk/shrunk")
-
-# Import settings from config.py
+# Import settings in config.py
 app.config.from_pyfile("config.py", silent=True)
 app.secret_key = app.config['SECRET_KEY']
 
@@ -28,7 +25,7 @@ if app.config["DB_REPL"] != "":
             port=app.config["DB_PORT"], replicaset=app.config["DB_REPL"])
 else:
     connect(app.config["DB_DATABASE"], host=app.config["DB_HOST"], 
-            port=app.config["DB_PORT"], username=app.config["USERNAME"], password=app.config["PASSWORD"])
+            port=app.config["DB_PORT"])
 
 
 ### Views ###

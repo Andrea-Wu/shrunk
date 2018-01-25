@@ -18,13 +18,13 @@ DB_PORT = 27017
 DB_DATABASE = "shrunk"
 
 # A secret key for Flask sessions
-SECRET_KEY = "something_secret"
+SECRET_KEY = "hello"
 
 # The public URL for shrunk
-SHRUNK_URL = "http://shrunk.yourdomain.com"
+SHRUNK_URL = "192.168.227.31"
 
 # The public URL for the link server
-LINKSERVER_URL = "http://shru.nk"
+LINKSERVER_URL = "192.168.227.31"
 
 # Determines whether or not the web application doubles as the link server.
 # The default setting is False, which assumes that a separate server handles
@@ -59,8 +59,9 @@ MAX_DISPLAY_LINKS = 50
 
 # Path to the GeoIP database file, which can be downloaded from
 # http://dev.maxmind.com/geoip/geoip2/geolite2/
-GEOIP_DB_PATH = "/path/to/database/GeoLite2-City.mmdb"
+GEOIP_DB_PATH = "/usr/lib/python3.4/site-packages/shrunk/GeoLite2-City.mmdb"
 
-# Authentication for MongoDB
-USERNAME = "<username>"
-PASSWORD = "<password>"
+# Login info to interface with MongoDB
+USERNAME = "shrunk"
+
+PASSWORD ="shrunkshrunk"
