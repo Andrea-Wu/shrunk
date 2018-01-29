@@ -20,6 +20,7 @@ tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 api = Api(app)
 
+os.chdir("/heroes/u1/ayw19/shrunk/shrunk")
 app.config.from_pyfile("config.py", silent=True)
 
 #from shrunk.linkserver import redirect_link
@@ -50,10 +51,12 @@ app.jinja_env.globals.update(formattime=formattime)
 # Connect to mongo
 if app.config["DB_REPL"] != "":
     connect(app.config["DB_DATABASE"], host=app.config["DB_HOST"], 
-            port=app.config["DB_PORT"], replicaset=app.config["DB_REPL"])
+            port=app.config["DB_PORT"], replicaset=app.config["DB_REPL"],
+	  	username=app.config["USERNAME"], password=app.config["PASSWORD"])
 else:
     connect(app.config["DB_DATABASE"], host=app.config["DB_HOST"], 
-            port=app.config["DB_PORT"])
+            port=app.config["DB_PORT"],  username=app.config["USERNAME"],
+		 password=app.config["PASSWORD"])
 
 
 
@@ -608,6 +611,9 @@ class UrlStatsAPI(Resource):
     def get(self, id):
         abort(501)  # not yet implemented
 
+
+if __name__ == "__main__":
+	app.run()
 
 api.add_resource(BannedDomainsListAPI,  '/api/banned_domains')
 api.add_resource(BannedDomainsAPI,      '/api/banned_domains/<string:url>')

@@ -13,6 +13,8 @@ from mongoengine import connect, DoesNotExist
 app = Flask(__name__)
 
 # Import settings in config.py
+
+os.chdir("/heroes/u1/ayw19/shrunk/shrunk")
 app.config.from_pyfile("config.py", silent=True)
 app.secret_key = app.config['SECRET_KEY']
 
