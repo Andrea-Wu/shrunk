@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Blacklist User</h1>
+
+<form action="" method="post">
+
+<label>Blacklist Users</label>
+<input type="text" name="user" value="{{ request.form.user }}">
+
+<input type="submit" name="blacklist" value="Blacklist">
+</form>
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+{% endblock %}

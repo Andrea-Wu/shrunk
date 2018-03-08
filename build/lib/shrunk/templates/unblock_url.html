@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Unblock URL</h1>
+
+<form action="" method="post">
+
+<label>Unblock URL</label>
+<input type="text" name="unblock_url" value="{{ request.form.block_url }}">
+
+<input type="submit" name="unblock" value="Block URL">
+</form>
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+{% endblock %}
