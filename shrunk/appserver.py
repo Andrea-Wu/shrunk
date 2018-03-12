@@ -91,7 +91,11 @@ def login_success(user):
     #return redirect('/')
     
     app.logger.info("{}: login".format(user.netid))
-    return render_template("index.html", netid=user.get_id(), privilege=user.get_type())
+
+    #db isn't working for now, so user.get_type() will break things.
+    #return render_template("index.html", netid=user.get_id(), privilege=user.get_type())
+
+    return render_template("index.html", netid=user.get_id())
 
 
 def unauthorized_admin():
@@ -109,15 +113,17 @@ def unauthorized_admin():
 @app.route("/")
 @app.route("/index")
 def render_index(**kwargs):
+
     if not hasattr(current_user, "netid"):
         # Anonymous user
          return redirect("/login")
 
 
     user = User(current_user.netid)
-    user = User("ayw19") #temp
     if not user.exists():
         user
+
+    return render_template("index.html", netid=current_user.netid)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -130,26 +136,43 @@ def login():
         return redirect("/index")
 
     if request.method == "GET":
+        print("whats up")
         return render_template("login.html", login_error=False)
 
     elif request.method == "POST":
+
+        print("banana")
         form = RULoginForm(request.form, load_user)
+        print("pear")
         if form.validate():
+
+            print("cherry")
         # We are missing a way to validate user logins, but that's for later
         #   when we set up more of the infrastructure. Right now, we only
         #   check if there are fields in the usename and password
             #user = models.User.objects.get(netid=request.form['username'])
+
+    
             user = User(request.form['username'])
+
+            print("durian")
             #a = Auth(app.config['AUTH'], get_user)
             #return a.login(request, RULoginForm, render_login, login_success)
-
+            
             app.logger.info("validated")
-            app.logger.info(user.is_authenticated())
-            if user.is_authenticated() and user.is_active():
-                login_user(user, remember=True)
-                return login_success(user)
-            else:
-                return render_template("login.html", login_error=True)
+
+            print("marijuana")
+# app.logger.info(user.is_authenticated())
+
+        #user.is_authenticated() also requires db auth, commenting out for now
+
+#            if user.is_authenticated() and user.is_active():
+#                login_user(user, remember=True)
+#                return login_success(user)
+#            else:
+#                return render_template("login.html", login_error=True)
+            print("apple")
+            return login_success(user)
         else:
             return render_template("login.html", login_error=True)
 

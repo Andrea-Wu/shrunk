@@ -1,152 +1,25 @@
+<!DOCTYPE html>
 <html>
-  <head> 
-	  <meta charset = "UTF-8">
-	  <title>flask react</title>
 
-	  <script src = "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.min.js"></script>
-	  <script src = "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
-  </head>
+<head>
+	<title>login page</title>
+</head>
 
-  <body>
-	<div id="mount-point">
-	</div>
-		
-  </body>
+<body>
 
-  <script type="text/jsx">
+<h1>this is the login page</h1>
+	<form action="" method="post">
+		<label>Username</label>
+		<input type="text" name="username" value="{{request.form.username}}" required>
 
-	  //not sure why these aren't needed
-//	var React = require('react');
-//	var ReactDOM = require('react-dom');
+		<label>Password</label>
+		<input type="password" name="password" value={{request.form.password}} required>
 
+		<input type="submit" name="login" value="Login">
+	</form>
 
-//move this into a file called URLlist.js & export default TodoList	  
-	class URLlist extends React.Component{
-
-		constructor(props){ //is called before constructor is mounted
-
-			//calling parent constructor
-			//props are arbitraty inputs
-			super(props);
-
-			this.state = {
-				title: "",
-				longURL: "", //DIFF
-				items:[]
-			}
-
-			//binds functions to events that jsx components will handle
-			this.addUrl = this.addUrl.bind(this);
-			this.handleURLChange = this.handleURLChange.bind(this);
-			this.handleTitleChange = this.handleTitleChange.bind(this);
-		}
+</body>
 
 
-		render(){  //examines this.props and this.state, returns a React element
-			console.log(React.version);
-			return (
-				<div className="mount-point">
-				   <div className="create-url">
-				      <h1>Create a new link</h1>
-				      <form onSubmit={this.addUrl} ref="urlForm">
-					 <input placeholder="enter url" value={this.state.longURL} onChange={this.handleURLChange}>
-					 {/* this is probably a bad way to implement state changing, but it works
-					      bad because it updates the state UPON EVERY KEY PRESS */}
-					 </input>
-
-					 <input placeholder="give your URL a title" value={this.state.title} onChange={this.handleTitleChange}> 
-					 </input>
-					 <button type="submit">add</button>
-				      </form>
-				   </div>
-
-					{/* passes list of urls as a prop into Items (sub-component?) class*/}
-				   <Items entries={this.state.items} />
-				</div>
-
-			);
-
-		}
-
-		handleTitleChange(e){ //handle state of text in title input
-			this.setState({title: event.target.value});
-
-		}
-
-		handleURLChange(e){ //handles state of text in longURl input
-			//(event.target) references the html tag that has called function
-			this.setState({longURL: event.target.value});
-		}
-
-		addUrl(e){ //called when form is submitted, adds url to list
-			var itemArr = this.state.items;
-
-			if(this.state.longURL != ""){
-				
-				//adds new element to state.items
-				itemArr.unshift({
-					title: this.state.title,
-					longURL: this.state.longURL,
-					key: Date.now() //why?
-				});
-				
-				//re-renders array with updated state
-				this.setState({
-					items: itemArr
-				});
-
-				//resets input field
-				this.state.value = "";
-
-			}
-
-			console.log(itemArr);
-
-			//prevents page from reloading upon submit
-			e.preventDefault();
-		}
-	}
-
-	class Items extends React.Component{
-
-		constructor(props){
-			super(props);
-
-			this.createList = this.createList.bind(this);
-		}
-
-		createList(item){
-			return (
-			      <li key={item.key} >
-				 <h5>title of url will go here...{item.title}</h5>
-				<p>long url will go here...{item.longURL}</p>
-
-				<p>short url will go here</p> 
-				<p>views go here</p>
-				<p>date created</p>
-
-				<p>edit button</p>
-				<p>delete button</p>
-			      </li>
-			);
-		}
-
-		render(){
-			var myUrls = this.props.entries;
-			
-			//each list item converted into jsx 
-			var UrlListItems = myUrls.map(this.createList);
-
-			return(
-				<ul className="myList">
-					{UrlListItems}
-				</ul>
-			);
-		}
-	}
-
-	//renders component
-	React.render(<URLlist />, document.getElementById("mount-point"));
-  </script>
 
 </html>

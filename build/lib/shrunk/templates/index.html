@@ -85,7 +85,8 @@
 				
 				//adds new element to state.items
 				itemArr.unshift({
-					text: this.state.longURL,
+					title: this.state.title,
+					longURL: this.state.longURL,
 					key: Date.now() //why?
 				});
 				
@@ -117,8 +118,8 @@
 		createList(item){
 			return (
 			      <li key={item.key} >
-			         <h5>title of url will go here</h5>
-				<p>long url will go here...{item.text}</p>
+				 <h5>title of url will go here...{item.title}</h5>
+				<p>long url will go here...{item.longURL}</p>
 
 				<p>short url will go here</p> 
 				<p>views go here</p>
